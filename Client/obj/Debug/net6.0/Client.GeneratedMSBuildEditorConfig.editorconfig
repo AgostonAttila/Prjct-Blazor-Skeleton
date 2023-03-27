@@ -20,30 +20,70 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Components/Shared/Footer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcRm9vdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/FetchData.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Components/Shared/NavBar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTmF2QmFyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Index.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Components/Shared/NavBarFullPage.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTmF2QmFyRnVsbFBhZ2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Shared/SurveyPrompt.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Components/Shared/SideBar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcU2lkZUJhci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Components/Shared/ThemeSelector.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcVGhlbWVTZWxlY3Rvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Layouts/LayoutFullScreen.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xMYXlvdXRGdWxsU2NyZWVuLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Authentications/2StepCover.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXDJTdGVwQ292ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Authentications/LockCover.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXExvY2tDb3Zlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Authentications/ResetPwdCover.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXFJlc2V0UHdkQ292ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Authentications/SingInCover.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXFNpbmdJbkNvdmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Authentications/SingUpCover.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXFNpbmdVcENvdmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Default.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVmYXVsdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Errors/Error404.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3JzXEVycm9yNDA0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Errors/Error500.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3JzXEVycm9yNTAwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Shared/MainLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-ocnk4r8tjs
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Layouts/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xNYWluTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-0so0yeis83
 
-[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Shared/NavMenu.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-kd1ih0s86n
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Layouts/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0c1xOYXZNZW51LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-1yko022g8g

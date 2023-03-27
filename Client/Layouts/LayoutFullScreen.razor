@@ -1,0 +1,29 @@
+﻿@inject AppState AppState
+@implements IDisposable
+
+@using Client.Components.Shared
+@using Client.StateContainers;
+@inherits LayoutComponentBase
+
+
+<main class="main-content position-relative border-radius-lg ">
+	<NavBarFullPage />
+	@Body
+</main>
+
+
+
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		AppState.OnChange += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		AppState.OnChange -= StateHasChanged;
+	}
+
+}
