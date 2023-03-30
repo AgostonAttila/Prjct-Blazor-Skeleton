@@ -12,6 +12,8 @@ namespace Persistence
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 		}
+
+		public DbSet<Photo> Photos { get; set; }
 	}
 }
 

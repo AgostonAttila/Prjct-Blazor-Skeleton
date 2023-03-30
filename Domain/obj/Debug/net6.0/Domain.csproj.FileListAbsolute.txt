@@ -1,0 +1,12 @@
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\bin\Debug\net6.0\Domain.deps.json
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\bin\Debug\net6.0\Domain.dll
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\bin\Debug\net6.0\Domain.pdb
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.csproj.AssemblyReference.cache
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.AssemblyInfoInputs.cache
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.AssemblyInfo.cs
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.csproj.CoreCompileInputs.cache
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.dll
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\refint\Domain.dll
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\Domain.pdb
+E:\Programming\Projects\Prjct-Blazor-Skeleton\Domain\obj\Debug\net6.0\ref\Domain.dll

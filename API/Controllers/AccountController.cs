@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using API.DTOs;
+﻿using API.DTOs;
 using API.Services;
-using Domain;
 using Infrastructure.Email;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using System.Text;
 
 namespace API.Controllers
 {
@@ -49,16 +39,16 @@ namespace API.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("login")]
-		public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+		public async Task<ActionResult<UserDTO>> Login(LoginDTO LoginDTO)
 		{
-			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(loginDto.Email);
-			.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
+			.FirstOrDefaultAsync(x => x.Email == LoginDTO.Email);
 
 			if (user == null) return Unauthorized("Invalid email");
 
 			if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
-			var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+			var result = await _signInManager.CheckPasswordSignInAsync(user, LoginDTO.Password, false);
 
 			if (result.Succeeded)
 			{
@@ -71,7 +61,7 @@ namespace API.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("fbLogin")]
-		public async Task<ActionResult<UserDto>> FacebookLogin(string accessToken)
+		public async Task<ActionResult<UserDTO>> FacebookLogin(string accessToken)
 		{
 			var fbVerifyKeys = _config["Facebook:AppId"] + "|" + _config["Facebook:AppSecret"];
 
@@ -121,14 +111,14 @@ namespace API.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("register")]
-		public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+		public async Task<ActionResult<UserDTO>> Register(RegisterDTO RegisterDTO)
 		{
-			if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
+			if (await _userManager.Users.AnyAsync(x => x.Email == RegisterDTO.Email))
 			{
 				ModelState.AddModelError("email", "Email taken");
 				return ValidationProblem();
 			}
-			if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
+			if (await _userManager.Users.AnyAsync(x => x.UserName == RegisterDTO.Username))
 			{
 				ModelState.AddModelError("username", "Username taken");
 				return ValidationProblem();
@@ -136,12 +126,12 @@ namespace API.Controllers
 
 			var user = new AppUser
 			{
-				DisplayName = registerDto.DisplayName,
-				Email = registerDto.Email,
-				UserName = registerDto.Username
+				DisplayName = RegisterDTO.DisplayName,
+				Email = RegisterDTO.Email,
+				UserName = RegisterDTO.Username
 			};
 
-			var result = await _userManager.CreateAsync(user, registerDto.Password);
+			var result = await _userManager.CreateAsync(user, RegisterDTO.Password);
 
 			/*if (result.Succeeded)
             {
@@ -206,7 +196,7 @@ namespace API.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public async Task<ActionResult<UserDto>> GetCurrentUser()
+		public async Task<ActionResult<UserDTO>> GetCurrentUser()
 		{
 			var user = await _userManager.Users.Include(p => p.Photos)
 			.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));      //.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
@@ -215,9 +205,9 @@ namespace API.Controllers
 		}
 
 
-		private UserDto CreateUserObject(AppUser user)
+		private UserDTO CreateUserObject(AppUser user)
 		{
-			return new UserDto
+			return new UserDTO
 			{
 				DisplayName = user.DisplayName,
 				Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
@@ -228,7 +218,7 @@ namespace API.Controllers
 
 		[Authorize]
 		[HttpPost("refreshToken")]
-		public async Task<ActionResult<UserDto>> RefreshToken()
+		public async Task<ActionResult<UserDTO>> RefreshToken()
 		{
 			var refreshToken = Request.Cookies["refreshToken"];
 			var user = await _userManager.Users

@@ -6,11 +6,11 @@ builder.Services.AddControllers(opt =>
 {
 	var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 	opt.Filters.Add(new AuthorizeFilter(policy));
-})
-			 .AddFluentValidation(config =>
-			 {
-				 config.RegisterValidatorsFromAssemblyContaining<Create>();
-			 });
+});
+			 //.AddFluentValidation(config =>
+			 //{
+				// config.RegisterValidatorsFromAssemblyContaining<Create>();
+			 //});
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
@@ -58,6 +58,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+
 	app.UseSwagger();
 	app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
 }
