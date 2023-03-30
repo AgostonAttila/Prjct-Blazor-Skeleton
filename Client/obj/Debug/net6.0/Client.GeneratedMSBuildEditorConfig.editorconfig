@@ -80,6 +80,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3JzXEVycm9yNTAwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/Pages/Kanban.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcS2FuYmFuLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Programming/Projects/Prjct-Blazor-Skeleton/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

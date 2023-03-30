@@ -26,7 +26,7 @@
 				else
 				{
 					<li class="nav-item">
-						<a data-bs-toggle="collapse" href="#@sideBarMenuItem.Id" class="nav-link @sideBarMenuItem.Css" aria-controls="@sideBarMenuItem.Id" role="button" aria-expanded="false">
+						<a data-bs-toggle="collapse" href="#@sideBarMenuItem.Id" class="nav-link @css[sideBarMenuItem.SequenceId]" aria-controls="@sideBarMenuItem.Id" role="button" aria-expanded="false">
 							<div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
 								<i class="@sideBarMenuItem.Icon text-sm opacity-10"></i>
 							</div>
@@ -69,11 +69,9 @@
 										</li>
 									}
 								}
-
 							</ul>
 						</div>
 					</li>
-
 				}
 			}
 		</ul>
@@ -104,6 +102,10 @@
 	static string AuthenticationActiveClass = "";
 
 
+	private List<string> css = new List<string> { "", "", "", "", "" };
+	//private List<string> identifiers = new List<string> { "Dashboards", "Pages", "PAGES", "Applications", "Ecommerce", "Authentication" };
+	//private Dictionary<string, ElementReference> myComponents = new Dictionary<string, ElementReference>();
+		
 
 	async Task NavLinkOnClick(string normalTitle)
 	{
@@ -115,6 +117,14 @@
 		EcommerceActiveClass = (activeMenuItem?.Name == "Ecommerce") ? "active" : "";
 		AuthenticationActiveClass = (activeMenuItem?.Name == "Authentication") ? "active" : "";
 
+		css[0] = (activeMenuItem?.Name == "Dashboards") ? "active" : "";
+		css[1] = (activeMenuItem?.Name == "Pages") ? "active" : "";
+		css[2] = (activeMenuItem?.Name == "Applications") ? "active" : "";
+		css[3] = (activeMenuItem?.Name == "Ecommerce") ? "active" : "";
+		css[4] = (activeMenuItem?.Name == "Authentication") ? "active" : "";
+
+		//ElementReference elementref = myComponents[activeMenuItem.Name];
+		
 		AppState.SetNavBarSelectedMainMenu(activeMenuItem.Name);
 		AppState.SetNavBarSelectedMenu(normalTitle);
 
@@ -133,9 +143,9 @@
 
 	List<SideBarMenuItem> sideBarMenuItemList = new List<SideBarMenuItem>
 	{
-		 new SideBarMenuItem{ Name = "Dashboards", Id = "dashboardsExamples", Css = DashboardActiveClass, Icon = "ni ni-shop text-primary" , MainMenuItemList =dashboardMenuItems},
-		 new SideBarMenuItem{ Name = "PAGES" , Type = "Break"},
-		 new SideBarMenuItem{ Name = "Pages" , Id = "pagesExamples", Css = PagesActiveClass, Icon = "ni ni-ungroup text-warning",
+		 new SideBarMenuItem{ SequenceId = 0, Name = "Dashboards", Id = "dashboardsExamples", Css = DashboardActiveClass, Icon = "ni ni-shop text-primary" , MainMenuItemList =dashboardMenuItems},
+		 new SideBarMenuItem{  SequenceId = 99, Name = "PAGES" , Type = "Break"},
+		 new SideBarMenuItem{ SequenceId = 1, Name = "Pages" , Id = "pagesExamples", Css = PagesActiveClass, Icon = "ni ni-ungroup text-warning",
 		  MainMenuItemList = new List<MenuItem>
 		 {
 			new MenuItem{ Title = "Profile" , MenuItemList = profileMenuItems, Id = "profileExample"},
@@ -152,8 +162,8 @@
 			new MenuItem{ Title = "Syncfusion"  ,Link = "/syncfusion"},
 
 		 }},
-		 new SideBarMenuItem{ Name = "Applications" , Id = "applicationsExamples", Css = ApplicationActiveClass, Icon = "ni ni-ui-04 text-info", MainMenuItemList =applicationsMenuItems},
-		 new SideBarMenuItem{ Name = "Ecommerce" , Id = "ecommerceExamples", Css = EcommerceActiveClass, Icon = "ni ni-archive-2 text-success",
+		 new SideBarMenuItem{ SequenceId = 2, Name = "Applications" , Id = "applicationsExamples", Css = ApplicationActiveClass, Icon = "ni ni-ui-04 text-info", MainMenuItemList =applicationsMenuItems},
+		 new SideBarMenuItem{  SequenceId = 3,Name = "Ecommerce" , Id = "ecommerceExamples", Css = EcommerceActiveClass, Icon = "ni ni-archive-2 text-success",
 		 MainMenuItemList = new List<MenuItem>
 		 {
 			new MenuItem{ Title = "Overview" , Link = "/overview",  MiniTitle = "O"  },
@@ -162,7 +172,7 @@
 			new MenuItem{ Title = "Referral" ,  Link = "/referral",  MiniTitle = "R"},
 
 		 }},
-		 new SideBarMenuItem{ Name = "Authentication" , Id = "authExamples", Css = AuthenticationActiveClass, Icon = "ni ni-single-copy-04 text-danger",
+		 new SideBarMenuItem{  SequenceId = 4, Name = "Authentication" , Id = "authExamples", Css = AuthenticationActiveClass, Icon = "ni ni-single-copy-04 text-danger",
 		 MainMenuItemList = new List<MenuItem>
 		 {
 			new MenuItem{ Title = "Sing In" , MenuItemList = singinMenuItems, Id = "signinExample"},
