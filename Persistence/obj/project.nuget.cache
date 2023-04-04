@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "TK2zMXjY+YeKLeGzo1aPXZWb8qv0DUzw5lWbFZobYwQPmhOwaYiUOkASpoLE93rEzM9XrchYrKR+XX4WoQC1tQ==",
+  "dgSpecHash": "frCNBZTEW30wwTw4dDdixXIrJxX9EN3KHCGEgidqM7GEhsg86FxnM3eWxJa/vTTdAs1WFFQINTVlwO5ymTDtGA==",
   "success": true,
   "projectFilePath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Persistence\\Persistence.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DeveloperA\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
+    "C:\\Users\\DeveloperA\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\k4os.compression.lz4\\1.2.6\\k4os.compression.lz4.1.2.6.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\k4os.compression.lz4.streams\\1.2.6\\k4os.compression.lz4.streams.1.2.6.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\k4os.hash.xxhash\\1.0.6\\k4os.hash.xxhash.1.0.6.nupkg.sha512",
@@ -18,6 +19,7 @@
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.15\\microsoft.entityframeworkcore.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.15\\microsoft.entityframeworkcore.abstractions.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.15\\microsoft.entityframeworkcore.analyzers.6.0.15.nupkg.sha512",
+    "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore.design\\6.0.15\\microsoft.entityframeworkcore.design.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\6.0.15\\microsoft.entityframeworkcore.inmemory.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\6.0.15\\microsoft.entityframeworkcore.relational.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.entityframeworkcore.sqlite\\6.0.15\\microsoft.entityframeworkcore.sqlite.6.0.15.nupkg.sha512",

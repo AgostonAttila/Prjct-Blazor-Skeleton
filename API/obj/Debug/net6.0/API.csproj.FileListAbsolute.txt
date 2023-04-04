@@ -1,7 +1,0 @@
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.csproj.AssemblyReference.cache
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.GeneratedMSBuildEditorConfig.editorconfig
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.AssemblyInfoInputs.cache
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.AssemblyInfo.cs
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.csproj.CoreCompileInputs.cache
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.MvcApplicationPartsAssemblyInfo.cs
-E:\Programming\Projects\Prjct-Blazor-Skeleton\API\obj\Debug\net6.0\API.MvcApplicationPartsAssemblyInfo.cache

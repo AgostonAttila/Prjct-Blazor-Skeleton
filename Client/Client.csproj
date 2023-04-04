@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ServicesL\**" />
+    <Content Remove="ServicesL\**" />
+    <EmbeddedResource Remove="ServicesL\**" />
+    <None Remove="ServicesL\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.14" />
@@ -22,6 +29,10 @@
   <ItemGroup>
     <Folder Include="Pages\Errors\" />
     <Folder Include="Pages\Authentications\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
 </Project>
