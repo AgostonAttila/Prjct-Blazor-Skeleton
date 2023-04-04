@@ -78,13 +78,13 @@
 					<div class="card-body">
 						<form role="form">
 							<div class="mb-3">
-								<input type="text" class="form-control" placeholder="Name" aria-label="Name">
+								<input type="text" class="form-control" @bind-value=user.Username placeholder="Name" aria-label="Name">
 							</div>
 							<div class="mb-3">
-								<input type="email" class="form-control" placeholder="Email" aria-label="Email">
+								<input type="email" class="form-control" @bind-value=user.Email placeholder="Email" aria-label="Email">
 							</div>
 							<div class="mb-3">
-								<input type="password" class="form-control" placeholder="Password" aria-label="Password">
+								<input type="password" class="form-control" @bind-value=user.Password placeholder="Password" aria-label="Password">
 							</div>
 							<div class="form-check form-check-info text-start">
 								<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
@@ -93,7 +93,7 @@
 								</label>
 							</div>
 							<div class="text-center">
-								<button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2"  @onclick=@(() => HandleRegistration()>Sign up</button>
+								<button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2"  @onclick=@(() => HandleRegistration())>Sign up</button>
 							</div>
 							<p class="text-sm mt-3 mb-0">Already have an account? <a href="javascript:;" class="text-dark font-weight-bolder">Sign in</a></p>
 						</form>
@@ -106,45 +106,24 @@
 
 @code {
 	RegisterDTO user = new RegisterDTO();
-
-	string password;
-	string passwordconfirm;
-	string email;
-
-	string message = string.Empty;
-	string messageCssClass = string.Empty;
+	string messageCssClass = "";
 
 	protected override void OnInitialized()
 	{
-
-		StateContainer.OnChange += StateHasChanged;
+	
 	}
 
 	async Task HandleRegistration()
 	{
-		user.Email = email;
-		user.Password = password;
-		user.ConfirmPassword = passwordconfirm;
-		var result = await AuthService.Register(user);
-		message = result.Message;
-		if (result.Success)
+		
+		var result = await AccountService.Register(user);
+		
+		if (result.IsSuccess)
 		{
-
 			messageCssClass = "text-success";
-			await LocalStorage.SetItemAsync("authToken", result.Data);
-			await AuthenticationStateProvider.GetAuthenticationStateAsync();
-
-
-			AccountService.Register(user);
-
-			StateContainer.UserName = user.Email;
-			StateContainer.IsAdmin = false;
-			StateContainer.IsAuthenticated = true;
-
-
-			NavigationManager.NavigateTo("/");
-
-
+			//await LocalStorage.SetItemAsync("authToken", result.Data);
+			//await AuthenticationStateProvider.GetAuthenticationStateAsync();	
+			//NavigationManager.NavigateTo("/");
 		}
 		else
 		{
@@ -153,21 +132,21 @@
 		}
 	}
 
-	void ValidateEmail(ValidatorEventArgs e)
-	{
-		var email = Convert.ToString(e.Value);
+	//void ValidateEmail(ValidatorEventArgs e)
+	//{
+	//	var email = Convert.ToString(e.Value);
 
-		e.Status = string.IsNullOrEmpty(email) ? ValidationStatus.None :
-			email.Contains("@") ? ValidationStatus.Success : ValidationStatus.Error;
-	}
+	//	e.Status = string.IsNullOrEmpty(email) ? ValidationStatus.None :
+	//		email.Contains("@") ? ValidationStatus.Success : ValidationStatus.Error;
+	//}
 
 
 
-	void ValidatePassword(ValidatorEventArgs e)
-	{
-		var password = Convert.ToString(e.Value);
+	//void ValidatePassword(ValidatorEventArgs e)
+	//{
+	//	var password = Convert.ToString(e.Value);
 
-		e.Status = string.IsNullOrEmpty(password) ? ValidationStatus.None :
-			password.Length >= 6 ? ValidationStatus.Success : ValidationStatus.Error;
-	}
+	//	e.Status = string.IsNullOrEmpty(password) ? ValidationStatus.None :
+	//		password.Length >= 6 ? ValidationStatus.Success : ValidationStatus.Error;
+	//}
 }

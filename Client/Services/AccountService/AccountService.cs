@@ -37,7 +37,7 @@ namespace Client.Services.AccountService
 
         public async Task<Result<bool>> Register(RegisterDTO user)
         {
-            var result = await _http.PostAsJsonAsync("api/account/login", user);
+            var result = await _http.PostAsJsonAsync("api/account/register", user);
             return await result.Content.ReadFromJsonAsync<Result<bool>>();
         }
 

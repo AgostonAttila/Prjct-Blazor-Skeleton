@@ -3,17 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>enable</ImplicitUsings>   
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ServicesL\**" />
-    <Content Remove="ServicesL\**" />
-    <EmbeddedResource Remove="ServicesL\**" />
-    <None Remove="ServicesL\**" />
-  </ItemGroup>
-
+ 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.15" />
