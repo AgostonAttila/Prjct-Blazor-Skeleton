@@ -36,16 +36,16 @@ namespace WebAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("login")]
-		public async Task<ActionResult<UserDTO>> Login(LoginDTO LoginDTO)
+		public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
 		{
 			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
-			.FirstOrDefaultAsync(x => x.Email == LoginDTO.Email);
+			.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
 			if (user == null) return Unauthorized("Invalid email");
 
-			if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
+			//if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
-			var result = await _signInManager.CheckPasswordSignInAsync(user, LoginDTO.Password, false);
+			var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
 			if (result.Succeeded)
 			{
@@ -109,14 +109,14 @@ namespace WebAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("register")]
-		public async Task<ActionResult<UserDTO>> Register(RegisterDTO RegisterDTO)
+		public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
 		{
-			if (await _userManager.Users.AnyAsync(x => x.Email == RegisterDTO.Email))
+			if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
 			{
 				ModelState.AddModelError("email", "Email taken");
 				return ValidationProblem();
 			}
-			if (await _userManager.Users.AnyAsync(x => x.UserName == RegisterDTO.Username))
+			if (await _userManager.Users.AnyAsync(x => x.UserName == registerDTO.Username))
 			{
 				ModelState.AddModelError("username", "Username taken");
 				return ValidationProblem();
@@ -124,13 +124,13 @@ namespace WebAPI.Controllers
 
 			var user = new AppUser
 			{
-				DisplayName = RegisterDTO.DisplayName,
-				Email = RegisterDTO.Email,
-				UserName = RegisterDTO.Username,
+				DisplayName = registerDTO.DisplayName,
+				Email = registerDTO.Email,
+				UserName = registerDTO.Username,
 				Bio = " "
 			};
 
-			var result = await _userManager.CreateAsync(user, RegisterDTO.Password);
+			var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
 			/*if (result.Succeeded)
             {

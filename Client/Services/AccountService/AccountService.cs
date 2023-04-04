@@ -4,15 +4,22 @@ using System.Net.Http.Json;
 
 namespace Client.Services.AccountService
 {
+   
+
     public class AccountService : IAccountService
     {
+		
+		private readonly HttpClient _http;
+		private readonly IConfiguration _config;
+		string BASE_URL = "https://localhost:7210/";
 
-        private readonly HttpClient _http;
-
-        public AccountService(HttpClient http)
-        {
+		public AccountService(HttpClient http, IConfiguration config)
+		{
+			_config = config;       
             _http = http;
-        }
+            //BASE_URL = _config["BaseUrl"];
+
+		}
 
         public Task<Result<bool>> FacebookLogin()
         {
@@ -24,9 +31,9 @@ namespace Client.Services.AccountService
             throw new NotImplementedException();
         }
 
-        public async Task<Result<bool>> Login(LoginDTO user)
+        public async Task<Result<bool>> Login(LoginDTO loginDTO)
         {
-            var result = await _http.PostAsJsonAsync("api/account/login",  user);
+            var result = await _http.PostAsJsonAsync(BASE_URL + "api/Account/login", loginDTO);
             return await result.Content.ReadFromJsonAsync<Result<bool>>();
         }
 
@@ -35,9 +42,9 @@ namespace Client.Services.AccountService
             throw new NotImplementedException();
         }
 
-        public async Task<Result<bool>> Register(RegisterDTO user)
+        public async Task<Result<bool>> Register(RegisterDTO registerDTO)
         {
-            var result = await _http.PostAsJsonAsync("api/account/register", user);
+            var result = await _http.PostAsJsonAsync(BASE_URL +"api/Account/register", registerDTO);
             return await result.Content.ReadFromJsonAsync<Result<bool>>();
         }
 

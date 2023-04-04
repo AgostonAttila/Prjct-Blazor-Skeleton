@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Client;
+using Client.Services.AccountService;
 using Client.StateContainers;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -16,6 +17,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddBlazoredLocalStorage();
 
 //Services
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 //State containers
 builder.Services.AddSingleton<AppState>();
