@@ -1,10 +1,15 @@
-﻿@inject IAccountService AccountService
-@inject NavigationManager NavigationManager
-
-
-@page "/signincover";
+﻿@page "/signincover";
 @using Client.Models.DTOs;
 @using Client.Services.AccountService;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Blazored.LocalStorage
+
+
+@inject IAccountService AccountService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 @layout LayoutFullScreen
 
 
@@ -63,31 +68,17 @@
 
 @code {
 
-	LoginDTO user = new LoginDTO();
-	string messageCssClass = "";
+    LoginDTO user = new LoginDTO();
+    string messageCssClass = "";
 
-	protected override void OnInitialized()
-	{
+    protected override void OnInitialized()
+    {
 
-	}
+    }
 
-	async Task HandleLogin()
-	{
-	
-		var result = await AccountService.Login(user);
-
-		if (result.IsSuccess)
-		{
-			messageCssClass = "text-success";
-			//await LocalStorage.SetItemAsync("authToken", result.Data);
-			//await AuthenticationStateProvider.GetAuthenticationStateAsync();
-			//NavigationManager.NavigateTo("/");
-		}
-		else
-		{
-			messageCssClass = "text-danger";
-
-		}
+    async Task HandleLogin()
+    {
+        var result = await AccountService.Login(user);       
 	}
 }
 

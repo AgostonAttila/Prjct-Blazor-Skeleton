@@ -117,18 +117,18 @@
 		user.DisplayName = user.Username;	
 		var result = await AccountService.Register(user);
 		
-		if (result.IsSuccess)
-		{
-			messageCssClass = "text-success";
-			//await LocalStorage.SetItemAsync("authToken", result.Data);
-			//await AuthenticationStateProvider.GetAuthenticationStateAsync();	
-			//NavigationManager.NavigateTo("/");
-		}
-		else
-		{
-			messageCssClass = "text-danger";
+		//if ()
+		//{
+		//	messageCssClass = "text-success";
+		//	//await LocalStorage.SetItemAsync("authToken", result.Data);
+		//	//await AuthenticationStateProvider.GetAuthenticationStateAsync();	
+		//	//NavigationManager.NavigateTo("/");
+		//}
+		//else
+		//{
+		//	messageCssClass = "text-danger";
 
-		}
+		//}
 	}
 
 	//void ValidateEmail(ValidatorEventArgs e)

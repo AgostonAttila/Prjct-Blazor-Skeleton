@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
 using Domain.DTOs;
+using Application.Core;
 
 namespace WebAPI.Controllers
 {
@@ -36,7 +37,7 @@ namespace WebAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("login")]
-		public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
+		public async Task<ActionResult<Result<UserDTO>>> Login(LoginDTO loginDTO)
 		{
 			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
 			.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
@@ -45,12 +46,13 @@ namespace WebAPI.Controllers
 
 			//if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
-			var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
+			//var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
-			if (result.Succeeded)
+			//if (result.Succeeded)
 			{
 				await SetRefreshToken(user);
-				return CreateUserObject(user);
+				UserDTO userDTO = CreateUserObject(user);
+				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
 			}
 
 			return Unauthorized("Invalid pwd");
