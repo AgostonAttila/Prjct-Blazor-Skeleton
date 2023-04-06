@@ -3,6 +3,7 @@
 	public class RefreshToken
 	{
 		public int Id { get; set; }
+		public int RefreshTokenRefId { get; set; }
 		public AppUser AppUser { get; set; }
 		public string Token { get; set; }
 		public DateTime Expires { get; set; } = DateTime.UtcNow.AddDays(7);

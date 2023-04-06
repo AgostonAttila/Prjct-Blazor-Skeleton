@@ -7,8 +7,9 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Persistence
 {
-    //dotnet ef migrations add InitialCreate -p Persistence/ -s API/
-    public class DataContext : IdentityDbContext<AppUser>
+	//dotnet ef migrations add InitialCreate -p Persistence/ -s WebAPI/
+	//dotnet ef database update -p Persistence/ -s WebAPI/
+	public class DataContext : IdentityDbContext<AppUser>
 	{
 		public DataContext(DbContextOptions options) : base(options)
 		{
@@ -19,7 +20,7 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
-			builder.ApplyConfiguration(new RoleConfiguration());
+			builder.ApplyConfiguration(new RoleConfiguration());												 
 		}
 		
 
