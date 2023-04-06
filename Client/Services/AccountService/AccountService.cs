@@ -82,12 +82,12 @@ namespace Client.Services.AccountService
 
 		public async Task<Result<string>> Logout()
 		{
-			var authResult = await _httpClient.PostAsync("Account/logout", new StringContent("", Encoding.UTF8, "application/json"));
-			var authContent = await authResult.Content.ReadAsStringAsync();
-			var result = JsonSerializer.Deserialize<Result<string>>(authContent, _options);
+			//var authResult = await _httpClient.PostAsync("Account/logout", new StringContent("", Encoding.UTF8, "application/json"));
+			//var authContent = await authResult.Content.ReadAsStringAsync();
+			//var result = JsonSerializer.Deserialize<Result<string>>(authContent, _options);
 
-			if (!authResult.IsSuccessStatusCode)
-				return result;
+			//if (!authResult.IsSuccessStatusCode)
+			//	return result;
 
 			await _localStorageService.RemoveItemAsync("authToken");
 		

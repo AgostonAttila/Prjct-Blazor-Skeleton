@@ -41,8 +41,7 @@ namespace Client
 				_http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 			}
 			catch (Exception)
-			{
-				Response.Cookies.Delete("refreshToken");
+			{				
 				await _localStorageService.RemoveItemAsync("authToken");
 				identity = new ClaimsIdentity();
 			}

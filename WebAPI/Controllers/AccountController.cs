@@ -221,7 +221,7 @@ namespace WebAPI.Controllers
 		}
 
 		[Authorize]
-		[HttpGet("logout")]
+		[HttpPost("logout")]
 		public async Task<ActionResult<string>> Logout()
 		{
 			var cookieOptions = new CookieOptions
