@@ -16,21 +16,19 @@ namespace Client
 	{
 		private readonly ILocalStorageService _localStorageService;
 		private readonly HttpClient _http;
-		private readonly AuthenticationState _anonymous;
-		private NavigationManager _navigationManager;
+		private readonly AuthenticationState _anonymous;	
 
-		public CustomAuthStateProvider(ILocalStorageService localStorageService, HttpClient http, NavigationManager navigationManager)
+		public CustomAuthStateProvider(ILocalStorageService localStorageService, HttpClient http)
 		{
 			_localStorageService = localStorageService;
-			_http = http;
-			_navigationManager = navigationManager;
+			_http = http;		
 		}
 		
 		public override async Task<AuthenticationState> GetAuthenticationStateAsync()
 		{
 			var token = await _localStorageService.GetItemAsync<string>("authToken");
-			if (string.IsNullOrWhiteSpace(token))
-				return _anonymous;
+			//if (string.IsNullOrWhiteSpace(token))
+			//	return _anonymous;
 
 			var identity = new ClaimsIdentity();
 			_http.DefaultRequestHeaders.Authorization = null;
