@@ -35,8 +35,9 @@ namespace Client
 			try
 			{
 				identity = new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType");
-				//_http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
 				_http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+				//_http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
+
 			}
 			catch (Exception)
 			{				
