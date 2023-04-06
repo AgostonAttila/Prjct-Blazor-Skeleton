@@ -17,7 +17,7 @@ builder.Services.AddScoped(sp => new HttpClient
 { 
 	BaseAddress = new Uri("https://localhost:7210/api/")
 }
-.EnableIntercept(sp)); 
+.EnableIntercept(sp));
 
 
 

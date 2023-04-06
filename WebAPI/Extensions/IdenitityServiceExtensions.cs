@@ -22,7 +22,9 @@ namespace WebAPI.Extensions
 			{
 				opt.Password.RequireNonAlphanumeric = false;
 				opt.SignIn.RequireConfirmedEmail = true;
-			}).AddEntityFrameworkStores<DataContext>()
+			})
+			.AddRoles<IdentityRole>()
+			.AddEntityFrameworkStores<DataContext>()
 			.AddSignInManager<SignInManager<AppUser>>()
 			.AddDefaultTokenProviders();
 

@@ -7,10 +7,7 @@ namespace Domain
 	{
 		public string DisplayName { get; set; }
 		public string Bio { get; set; }		
-		public ICollection<Photo> Photos { get; set; }
-
-		[ForeignKey("RefreshTokenRefId")]
-		public RefreshToken RefreshToken { get; set; }
-		//public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();	
+		public ICollection<Photo> Photos { get; set; }			
+		public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();	
 	}
 }

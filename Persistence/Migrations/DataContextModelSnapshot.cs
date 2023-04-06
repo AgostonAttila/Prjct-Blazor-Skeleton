@@ -72,9 +72,6 @@ namespace Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("RefreshTokenRefId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -94,9 +91,6 @@ namespace Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("RefreshTokenRefId")
-                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -131,11 +125,12 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("RefreshTokenRefId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("Revoked")
                         .HasColumnType("datetime2");
@@ -145,6 +140,8 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("RefreshToken");
                 });
@@ -178,15 +175,15 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "db70e838-f951-44dc-8e61-321f4eebdf39",
-                            ConcurrencyStamp = "56f88401-7fd3-457a-a24d-b75b7c197321",
+                            Id = "9d95ed99-10a2-4e7c-8047-448f3bb85a0b",
+                            ConcurrencyStamp = "a8edc1ed-ae96-4e9a-9b54-0bb62015c2af",
                             Name = "Viewer",
                             NormalizedName = "VIEWER"
                         },
                         new
                         {
-                            Id = "f7de54df-a9fb-4943-b1dc-3b30d98352b1",
-                            ConcurrencyStamp = "99f8812b-3fcd-4f15-a222-b189cfe1ee17",
+                            Id = "8f8ebeb0-b139-4a13-b448-6492a60b4a50",
+                            ConcurrencyStamp = "cfba1bd5-0558-4e2c-8e7f-96c73e92492e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -298,22 +295,22 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.AppUser", b =>
-                {
-                    b.HasOne("Domain.RefreshToken", "RefreshToken")
-                        .WithOne("AppUser")
-                        .HasForeignKey("Domain.AppUser", "RefreshTokenRefId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RefreshToken");
-                });
-
             modelBuilder.Entity("Domain.Photo", b =>
                 {
                     b.HasOne("Domain.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -370,12 +367,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
                     b.Navigation("Photos");
-                });
 
-            modelBuilder.Entity("Domain.RefreshToken", b =>
-                {
-                    b.Navigation("AppUser")
-                        .IsRequired();
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }
