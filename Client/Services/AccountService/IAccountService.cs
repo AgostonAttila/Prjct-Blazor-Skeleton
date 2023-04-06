@@ -13,7 +13,7 @@ namespace Client.Services.AccountService
         Task<Result<string>> VerifyEmail(string token,string email);
         Task<Result<string>> ResendEmailConfirmationLink( string email);
         Task<IIdentity> GetCurrentUser();
-        Task<Result<UserDTO>> RefreshToken();
+        Task<string> RefreshToken();
 		Task<bool> Logout();
 
 	}

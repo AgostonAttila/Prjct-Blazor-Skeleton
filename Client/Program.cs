@@ -1,23 +1,34 @@
 using Blazored.LocalStorage;
 using Client;
+using Client.Services;
 using Client.Services.AccountService;
 using Client.StateContainers;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Syncfusion.Blazor;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped(sp => new HttpClient
+{ 
+	BaseAddress = new Uri("https://localhost:7210/api/")
+}
+.EnableIntercept(sp)); 
 
-//LocalStorage
-builder.Services.AddBlazoredLocalStorage();
+
 
 //Services
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.AddScoped<RefreshTokenService>();
+builder.Services.AddHttpClientInterceptor();
+
+//LocalStorage
+builder.Services.AddBlazoredLocalStorage();
 
 //State containers
 builder.Services.AddSingleton<AppState>();
@@ -26,6 +37,7 @@ builder.Services.AddSingleton<AppState>();
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<HttpInterceptorService>();
 
 builder.Services.AddSyncfusionBlazor();
 

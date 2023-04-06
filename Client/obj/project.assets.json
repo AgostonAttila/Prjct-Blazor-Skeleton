@@ -602,6 +602,22 @@
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
         }
+      },
+      "Toolbelt.Blazor.HttpClientInterceptor/10.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.WebAssembly": "3.2.0-preview2.20160.5"
+        },
+        "compile": {
+          "lib/netstandard2.1/Toolbelt.Blazor.HttpClientInterceptor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/Toolbelt.Blazor.HttpClientInterceptor.dll": {
+            "related": ".xml"
+          }
+        }
       }
     },
     "net6.0/browser-wasm": {
@@ -1198,6 +1214,22 @@
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
+        }
+      },
+      "Toolbelt.Blazor.HttpClientInterceptor/10.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.WebAssembly": "3.2.0-preview2.20160.5"
+        },
+        "compile": {
+          "lib/netstandard2.1/Toolbelt.Blazor.HttpClientInterceptor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/Toolbelt.Blazor.HttpClientInterceptor.dll": {
+            "related": ".xml"
+          }
         }
       }
     }
@@ -2206,6 +2238,21 @@
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Toolbelt.Blazor.HttpClientInterceptor/10.2.0": {
+      "sha512": "Su8wCbdC8AvTrqysjfIr0Pct6xW6foqwNDyVStRoWnntJtGpksj8DaEBMUpG4O+dLDbxPqpJhDsi4IYEqOesjA==",
+      "type": "package",
+      "path": "toolbelt.blazor.httpclientinterceptor/10.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.1/Toolbelt.Blazor.HttpClientInterceptor.dll",
+        "lib/netstandard2.1/Toolbelt.Blazor.HttpClientInterceptor.xml",
+        "nupkg-icon.png",
+        "toolbelt.blazor.httpclientinterceptor.10.2.0.nupkg.sha512",
+        "toolbelt.blazor.httpclientinterceptor.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -2214,7 +2261,8 @@
       "Microsoft.AspNetCore.Components.Authorization >= 6.0.15",
       "Microsoft.AspNetCore.Components.WebAssembly >= 6.0.14",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 6.0.14",
-      "Syncfusion.Blazor >= 21.1.35"
+      "Syncfusion.Blazor >= 21.1.35",
+      "Toolbelt.Blazor.HttpClientInterceptor >= 10.2.0"
     ]
   },
   "packageFolders": {
@@ -2282,6 +2330,10 @@
           "Syncfusion.Blazor": {
             "target": "Package",
             "version": "[21.1.35, )"
+          },
+          "Toolbelt.Blazor.HttpClientInterceptor": {
+            "target": "Package",
+            "version": "[10.2.0, )"
           }
         },
         "imports": [

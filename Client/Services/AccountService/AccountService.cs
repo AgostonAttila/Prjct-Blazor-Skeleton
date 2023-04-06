@@ -3,9 +3,12 @@ using Client.Models;
 using Client.Models.DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Syncfusion.Blazor.Kanban.Internal;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Claims;
 using System.Security.Principal;
+using System.Text;
+using System.Text.Json;
 
 namespace Client.Services.AccountService
 {
@@ -14,24 +17,22 @@ namespace Client.Services.AccountService
     public class AccountService : IAccountService
     {
 
-		private readonly HttpClient _http;
+		private readonly HttpClient _httpClient;
 		private readonly AuthenticationStateProvider _authStateProvider;
-
+		private readonly JsonSerializerOptions _options;
 		private readonly ILocalStorageService _localStorageService;
 		private NavigationManager _navigationManager;
 
-		private readonly IConfiguration _config;
-		string BASE_URL = "https://localhost:7210/";
+	
+		
 
-		public AccountService(HttpClient http, IConfiguration config, AuthenticationStateProvider authStateProvider, ILocalStorageService localStorageService, NavigationManager navigationManager)
-		{
-			_config = config;       
-            _http = http;
+		public AccountService(HttpClient httpClient, AuthenticationStateProvider authStateProvider, ILocalStorageService localStorageService, NavigationManager navigationManager)
+		{		   
+            _httpClient = httpClient;
 			_localStorageService = localStorageService;
 			_navigationManager = navigationManager;
-			_authStateProvider = authStateProvider;		
-			//BASE_URL = _config["BaseUrl"];
-
+			_authStateProvider = authStateProvider;
+			_options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 		}
 
         public Task<Result<UserDTO>> FacebookLogin()
@@ -46,40 +47,86 @@ namespace Client.Services.AccountService
 
         public async Task<Result<UserDTO>> Login(LoginDTO loginDTO)
         {
-            var result = await _http.PostAsJsonAsync(BASE_URL + "api/Account/login", loginDTO);
+			//         var result = await _http.PostAsJsonAsync("Account/login", loginDTO);
 
-			Result<UserDTO> response = await result.Content.ReadFromJsonAsync<Result<UserDTO>>();
+			//Result<UserDTO> response = await result.Content.ReadFromJsonAsync<Result<UserDTO>>();
 
-			if (response != null)
-			{
-				await _localStorageService.SetItemAsync("authToken", response.Value.Token);
-				await _authStateProvider.GetAuthenticationStateAsync();
-				_navigationManager.NavigateTo("/");
-			}
-			else 
-			{ 
+			//if (response != null)
+			//{
+			//	await _localStorageService.SetItemAsync("authToken", response.Value.Token);
+			//	await _authStateProvider.GetAuthenticationStateAsync();
+			//	_navigationManager.NavigateTo("/");
+			//}
+			//else 
+			//{ 
+
+			//}
+			//return await result.Content.ReadFromJsonAsync<Result<UserDTO>>();          	
 			
-			
-			}
-			return await result.Content.ReadFromJsonAsync<Result<UserDTO>>();          			
+		    var content = JsonSerializer.Serialize(loginDTO);
+			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+			var authResult = await _httpClient.PostAsync("Account/login", bodyContent);
+			var authContent = await authResult.Content.ReadAsStringAsync();
+			var result = JsonSerializer.Deserialize<Result<UserDTO>>(authContent, _options);
+
+			if (!authResult.IsSuccessStatusCode)
+				return result;
+
+			await _localStorageService.SetItemAsync("authToken", result.Value.Token);
+			await _localStorageService.SetItemAsync("refreshToken", result.Value.RefreshToken);
+			((CustomAuthStateProvider)_authStateProvider).GetAuthenticationStateAsync();
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value.Token);
+
+			return new Result<UserDTO> { IsSuccess = true };
 		}
 
 		public async Task<bool> Logout()
 		{
 			await _localStorageService.RemoveItemAsync("authToken");
+			await _localStorageService.RemoveItemAsync("refreshToken");
+			((CustomAuthStateProvider)_authStateProvider).GetAuthenticationStateAsync();
+			_httpClient.DefaultRequestHeaders.Authorization = null;
 			_navigationManager.NavigateTo("/");
 			return true;
 		}
 
-		public Task<Result<UserDTO>> RefreshToken()
+		public async Task<string> RefreshToken()
         {
-            throw new NotImplementedException();
-        }
+			var token = await _localStorageService.GetItemAsync<string>("authToken");
+			var refreshToken = await _localStorageService.GetItemAsync<string>("refreshToken");
+
+			var tokenDto = JsonSerializer.Serialize(new RefreshTokenDTO { Token = token, RefreshToken = refreshToken });
+			var bodyContent = new StringContent(tokenDto, Encoding.UTF8, "application/json");
+
+			var refreshResult = await _httpClient.PostAsync("token/refresh", bodyContent);
+			var refreshContent = await refreshResult.Content.ReadAsStringAsync();
+			Result<RefreshTokenDTO> result = JsonSerializer.Deserialize<Result<RefreshTokenDTO>>(refreshContent, _options);
+
+			if (!refreshResult.IsSuccessStatusCode)
+				throw new ApplicationException("Something went wrong during the refresh token action");
+
+			await _localStorageService.SetItemAsync("authToken", result.Value.Token);
+			await _localStorageService.SetItemAsync("refreshToken", result.Value.RefreshToken);
+
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value.Token);
+			return result.Value.Token;
+		}
 
         public async Task<Result<string>> Register(RegisterDTO registerDTO)
         {
-            var result = await _http.PostAsJsonAsync(BASE_URL +"api/Account/register", registerDTO);
-            return await result.Content.ReadFromJsonAsync<Result<string>>();
+			var content = JsonSerializer.Serialize(registerDTO);
+			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+			var result = await _httpClient.PostAsJsonAsync("Account/register", content);
+			Result<string> resultContent = await result.Content.ReadFromJsonAsync<Result<string>>();
+
+			if (!resultContent.IsSuccess)
+			{				
+				return resultContent;
+			}
+
+			return new Result<string> { IsSuccess = true };			
         }
 
         public Task<Result<string>> ResendEmailConfirmationLink(string email)

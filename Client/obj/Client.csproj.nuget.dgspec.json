@@ -65,6 +65,10 @@
             "Syncfusion.Blazor": {
               "target": "Package",
               "version": "[21.1.35, )"
+            },
+            "Toolbelt.Blazor.HttpClientInterceptor": {
+              "target": "Package",
+              "version": "[10.2.0, )"
             }
           },
           "imports": [

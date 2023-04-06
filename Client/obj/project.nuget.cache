@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GdMd6DGHPmJ+Gha325/KGAzXKA2Y7yUcPMTMjpSlnYsvJewt9bqmIZcahNSLeyQ3RxNGXJzYkS7qlsUisV0TPg==",
+  "dgSpecHash": "mMDUOani2ZHksf59bu8h/6oAT0gRs8l5plTCqosslKNb7YAmoyb9fLA4/kiilnr8hONfNvpQHDYcm55V6bQpKQ==",
   "success": true,
   "projectFilePath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Client\\Client.csproj",
   "expectedPackageFiles": [
@@ -40,6 +40,7 @@
     "C:\\Users\\DeveloperA\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
+    "C:\\Users\\DeveloperA\\.nuget\\packages\\toolbelt.blazor.httpclientinterceptor\\10.2.0\\toolbelt.blazor.httpclientinterceptor.10.2.0.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.15\\microsoft.netcore.app.runtime.mono.browser-wasm.6.0.15.nupkg.sha512"
   ],
   "logs": []
