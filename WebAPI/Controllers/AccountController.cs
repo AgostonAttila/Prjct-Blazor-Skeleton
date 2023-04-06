@@ -9,6 +9,7 @@ using System.Text;
 using Domain.DTOs;
 using Application.Core;
 using System.IdentityModel.Tokens.Jwt;
+using Domain;
 
 namespace WebAPI.Controllers
 {
@@ -219,7 +220,22 @@ namespace WebAPI.Controllers
 			return CreateUserObject(user);			
 		}
 
-		
+		[Authorize]
+		[HttpGet("logout")]
+		public async Task<ActionResult<string>> Logout()
+		{
+			var cookieOptions = new CookieOptions
+			{
+				HttpOnly = true,
+				Expires = DateTime.UtcNow.AddDays(7)
+			};
+
+		    Response.Cookies.Delete("refreshToken", cookieOptions);
+
+			return Ok(new Result<string> { IsSuccess = true, Value = "Logout success" });
+		}
+
+
 		//public async Task<ActionResult<UserDTO>> GetCurrentUser()
 		//{
 		//	var user = await _userManager.Users.Include(p => p.Photos)

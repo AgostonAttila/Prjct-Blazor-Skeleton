@@ -1,21 +1,85 @@
 ﻿@page "/"
 @page "/default"
-@using Microsoft.AspNetCore.Components.Authorization
+@using Client.Services.AccountService;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using System.Security.Claims;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAccountService IAccountService
 
-<AuthorizeView>
-    <Authorized>
-        Hello, @context.User.Identity.Name!
-        <a href="LogOut">Log out</a>
-    </Authorized>
-    <NotAuthorized>
-        <a href="Register">Register</a>
-        <a href="Login">Log in</a>
-    </NotAuthorized>
-</AuthorizeView>
+<div class="container-fluid py-4">
+	<div class="row">
+
+		<div class="col-lg-3 col-md-6 col-12">
+			<div class="card  mb-4">
+				<div class="card-body p-3">
+					<div class="row">
+						<AuthorizeView>
+							<Authorized>
+								Hello, @context.User.Identity.Name!
+								<button @onclick="Logout">Logout</button>
+							</Authorized>
+							<NotAuthorized>
+								<a href="Register">Register</a>
+								<a href="Login">Log in</a>
+							</NotAuthorized>
+						</AuthorizeView>
+					</div>
+					<div class="row">
+						<h1>ClaimsPrincipal Data</h1>
+
+						<button @onclick="GetClaimsPrincipalData">Get ClaimsPrincipal Data</button>
+
+						<p>@authMessage</p>
+
+						@if (claims.Count() > 0)
+						{
+							<ul>
+								@foreach (var claim in claims)
+								{
+									<li>@claim.Type: @claim.Value</li>
+								}
+							</ul>
+						}
+
+						<p>@surname</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
 
 
+	</div>
+</div>
 
- @code
- {
+@code
+{
+	private string? authMessage;
+	private string? surname;
+	private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
 
- }
+
+	private async Task Logout()
+	{
+		IAccountService.Logout();
+	}
+
+	private async Task GetClaimsPrincipalData()
+	{
+		var authState = await AuthenticationStateProvider
+			.GetAuthenticationStateAsync();
+		var user = authState.User;
+
+		if (user.Identity is not null && user.Identity.IsAuthenticated)
+		{
+			authMessage = $"{user.Identity.Name} is authenticated.";
+			claims = user.Claims;
+			surname = user.FindFirst(c => c.Type == ClaimTypes.Surname)?.Value;
+		}
+		else
+		{
+			authMessage = "The user is NOT authenticated.";
+		}
+	}
+}

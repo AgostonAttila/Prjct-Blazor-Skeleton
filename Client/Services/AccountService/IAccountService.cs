@@ -10,11 +10,12 @@ namespace Client.Services.AccountService
         Task<Result<UserDTO>> Login(LoginDTO user);
         Task<Result<UserDTO>> FacebookLogin();
         Task<Result<string>> Register(RegisterDTO user);
-        Task<Result<string>> VerifyEmail(string token,string email);
+		Task<Result<string>> Logout();
+		Task<Result<string>> VerifyEmail(string token,string email);
         Task<Result<string>> ResendEmailConfirmationLink( string email);
         Task<IIdentity> GetCurrentUser();
         Task<string> RefreshToken();
-		Task<bool> Logout();
+		
 
 	}
 }
