@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace WebAPI.Extensions
 {
@@ -22,7 +23,7 @@ namespace WebAPI.Extensions
             //belerakni többi db-t
             services.AddDbContext<DataContext>(options =>
             {               
-                options.UseSqlServer("Server=./;Database=skeleton;User Id=sa3;Password=Titkos!;");
+                options.UseSqlServer(config.GetConnectionString("sqlConnection"));
 
             });
 

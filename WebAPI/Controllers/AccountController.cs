@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Text;
 using Domain.DTOs;
 using Application.Core;
+using AutoMapper;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace WebAPI.Controllers
 {
@@ -21,9 +23,11 @@ namespace WebAPI.Controllers
 		private readonly IConfiguration _config;
 		private readonly HttpClient _httpClient;
 		private readonly EmailSender _emailSender;
+		private readonly IMapper _automapper;
 
-		public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config, EmailSender emailSender)
+		public AccountController(IMapper automapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config, EmailSender emailSender)
 		{
+			_automapper = automapper;
 			_emailSender = emailSender;
 			_config = config;
 			_tokenService = tokenService;
@@ -39,23 +43,38 @@ namespace WebAPI.Controllers
 		[HttpPost("login")]
 		public async Task<ActionResult<Result<UserDTO>>> Login(LoginDTO loginDTO)
 		{
-			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
-			.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
+			//régi
+			//var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
+			//.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
-			if (user == null) return Unauthorized("Invalid email");
 
+			//if (user == null) return Unauthorized("Invalid email");
 			//if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
-
 			//var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
-
 			//if (result.Succeeded)
-			{
-				await SetRefreshToken(user);
-				UserDTO userDTO = CreateUserObject(user);
-				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
-			}
+			//{
+			//	await SetRefreshToken(user);
+			//	UserDTO userDTO = CreateUserObject(user);
+			//	return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
+			//}
 
-			return Unauthorized("Invalid pwd");
+			var user = await _userManager.FindByNameAsync(loginDTO.Email);
+
+			if (user == null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password))
+				return Unauthorized(new Result<UserDTO> { Error = "Invalid Authentication" });
+
+
+			var signingCredentials = _tokenService.GetSigningCredentials();
+			var claims = await _tokenService.GetClaims(user);
+			var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
+			var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+			user.RefreshToken = _tokenService.GenerateRefreshToken();
+			//user.RefreshTokens = new List<RefreshToken> {  };						
+			await _userManager.UpdateAsync(user);
+
+			return Ok(new Result<UserDTO> { IsSuccess = true, Value = new UserDTO { RefreshToken = user.RefreshToken.Token, Token = token } });
+
 		}
 
 		[AllowAnonymous]
@@ -111,8 +130,12 @@ namespace WebAPI.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("register")]
-		public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+		public async Task<ActionResult<string>> Register(RegisterDTO registerDTO)
 		{
+
+			if (registerDTO == null || !ModelState.IsValid)
+				return BadRequest();
+
 			if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
 			{
 				ModelState.AddModelError("email", "Email taken");
@@ -124,13 +147,15 @@ namespace WebAPI.Controllers
 				return ValidationProblem();
 			}
 
-			var user = new AppUser
-			{
-				DisplayName = registerDTO.DisplayName,
-				Email = registerDTO.Email,
-				UserName = registerDTO.Username,
-				Bio = " "
-			};
+			//var user = new AppUser
+			//{
+			//	DisplayName = registerDTO.DisplayName,
+			//	Email = registerDTO.Email,
+			//	UserName = registerDTO.Username,
+			//	Bio = " "
+			//};
+
+			var user = _automapper.Map<AppUser>(registerDTO);
 
 			var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
@@ -138,28 +163,24 @@ namespace WebAPI.Controllers
             {
                 await SetRefreshToken(user);
                 return CreateUserObject(user);
-            }
-            
+            }            
              return BadRequest("Problem registering user");
-
             */
 
-			if (!result.Succeeded) return BadRequest("Problem registering user");
+			if (!result.Succeeded)
+			{
+				var errors = result.Errors.Select(e => e.Description);
+				return BadRequest(new Result<string> { Error = "Problem registering user" });
+			}
 
-			var origin = Request.Headers["origin"];
-			var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-			token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+			await _userManager.AddToRoleAsync(user, "Viewer");
+			//await SendVerificationEmail(user);
 
-			var verifyUrl = $"{origin}/account/verifyEmail?token={token}&email={user.Email}";
-			var message = $"<p>Please click the below link to verify your email address:</p><p><a href='{verifyUrl}'>Click to verify email</a></p>";
-
-			//await _emailSender.SendEmailAsync(user.Email, "Please verify email", message);
-
-			return Ok("Registration success - please verify email");
+			return Ok(new Result<string> { IsSuccess = true, Value = "Registration success - please verify email" });
 
 
 		}
-
+		
 		[AllowAnonymous]
 		[HttpPost("verifyEmail")]
 		public async Task<IActionResult> VerifyEmail(string token, string email)
@@ -194,9 +215,51 @@ namespace WebAPI.Controllers
 
 			return Ok("Email verification link resent");
 		}
-
+							
 		[Authorize]
-		[HttpGet]
+		[HttpPost("refreshToken")]
+		public async Task<ActionResult<RefreshTokenDTO>> RefreshToken(RefreshTokenDTO refreshTokenDTO)
+		{
+
+
+			//var refreshToken = Request.Cookies["refreshToken"];
+			//var user = await _userManager.Users
+			//	.Include(r => r.RefreshTokens)
+			//	.Include(p => p.Photos)
+			//	.FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
+
+			//if (user == null) return Unauthorized();
+
+			//var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+
+			//if (oldToken != null && !oldToken.IsActive) return Unauthorized();
+
+			//return CreateUserObject(user);
+
+			if (refreshTokenDTO is null)
+			{
+				return BadRequest(new Result<string> { IsSuccess = false, Error = "Invalid client request" });
+			}
+
+			var principal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenDTO.Token);
+			var username = principal.Identity.Name;
+
+			var user = await _userManager.FindByEmailAsync(username);
+			if (user == null || user.RefreshToken.Token != refreshTokenDTO.RefreshToken || user.RefreshToken.Expires <= DateTime.Now)
+				return BadRequest(new Result<string> { IsSuccess = false, Error = "Invalid client request" });
+
+			var signingCredentials = _tokenService.GetSigningCredentials();
+			var claims = await _tokenService.GetClaims(user);
+			var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
+			var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+			user.RefreshToken = _tokenService.GenerateRefreshToken();
+
+			await _userManager.UpdateAsync(user);
+
+			return Ok( new Result<RefreshTokenDTO> {  Value = new RefreshTokenDTO { Token = token, RefreshToken = user.RefreshToken.Token } ,IsSuccess = true });
+
+		}
+
 		public async Task<ActionResult<UserDTO>> GetCurrentUser()
 		{
 			var user = await _userManager.Users.Include(p => p.Photos)
@@ -205,6 +268,22 @@ namespace WebAPI.Controllers
 			return CreateUserObject(user);
 		}
 
+		private async Task SetRefreshToken(AppUser user)
+		{
+			var refreshToken = _tokenService.GenerateRefreshToken();
+
+			user.RefreshToken = refreshToken;
+			//user.RefreshTokens.Add(refreshToken);
+			await _userManager.UpdateAsync(user);
+
+			var cookieOptions = new CookieOptions
+			{
+				HttpOnly = true,
+				Expires = DateTime.UtcNow.AddDays(7)
+			};
+
+			Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
+		}
 
 		private UserDTO CreateUserObject(AppUser user)
 		{
@@ -217,40 +296,16 @@ namespace WebAPI.Controllers
 			};
 		}
 
-		[Authorize]
-		[HttpPost("refreshToken")]
-		public async Task<ActionResult<UserDTO>> RefreshToken()
+		private async Task SendVerificationEmail(AppUser user)
 		{
-			var refreshToken = Request.Cookies["refreshToken"];
-			var user = await _userManager.Users
-				.Include(r => r.RefreshTokens)
-				.Include(p => p.Photos)
-				.FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
+			var origin = Request.Headers["origin"];
+			var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+			token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-			if (user == null) return Unauthorized();
+			var verifyUrl = $"{origin}/account/verifyEmail?token={token}&email={user.Email}";
+			var message = $"<p>Please click the below link to verify your email address:</p><p><a href='{verifyUrl}'>Click to verify email</a></p>";
 
-			var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
-
-			if (oldToken != null && !oldToken.IsActive) return Unauthorized();
-
-			return CreateUserObject(user);
+			await _emailSender.SendEmailAsync(user.Email, "Please verify email", message);
 		}
-
-		private async Task SetRefreshToken(AppUser user)
-		{
-			var refreshToken = _tokenService.GenerateRefreshToken();
-
-			user.RefreshTokens.Add(refreshToken);
-			await _userManager.UpdateAsync(user);
-
-			var cookieOptions = new CookieOptions
-			{
-				HttpOnly = true,
-				Expires = DateTime.UtcNow.AddDays(7)
-			};
-
-			Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
-		}
-
 	}
 }

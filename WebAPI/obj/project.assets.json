@@ -1744,6 +1744,7 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "AutoMapper": "12.0.1",
+          "Domain": "1.0.0",
           "FluentValidation.AspNetCore": "11.3.0",
           "Microsoft.EntityFrameworkCore": "6.0.15"
         },

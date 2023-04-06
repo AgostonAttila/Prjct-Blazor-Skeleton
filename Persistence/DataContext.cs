@@ -1,6 +1,8 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Configuration;
+using System.Reflection.Emit;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Persistence
@@ -17,6 +19,7 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
+			builder.ApplyConfiguration(new RoleConfiguration());
 		}
 		
 

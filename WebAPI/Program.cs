@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.OpenApi.Writers;
 using Persistence;
 using WebAPI.Extensions;
 
@@ -10,10 +12,11 @@ builder.Services.AddControllers(opt =>
     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     opt.Filters.Add(new AuthorizeFilter(policy));
 });
-             //.AddFluentValidation(config =>
-             //{
-             //    config.RegisterValidatorsFromAssemblyContaining<Create>();
-             //});
+//.AddFluentValidation(config =>
+//{
+//    config.RegisterValidatorsFromAssemblyContaining<Create>();
+//});
+builder.Services.AddCorsPolicy(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
@@ -27,6 +30,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+	app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -37,10 +41,17 @@ else
     });
 }
 
+app.UseCors("CorsPolicy");
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+	FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
+	RequestPath = new PathString("/StaticFiles")
+});
 
-app.UseCors("CorsPolicy");
+
 
 app.UseAuthentication();
 app.UseAuthorization();

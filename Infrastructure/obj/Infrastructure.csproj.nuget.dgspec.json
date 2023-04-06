@@ -32,7 +32,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Domain\\Domain.csproj": {
+                "projectPath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Domain\\Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
