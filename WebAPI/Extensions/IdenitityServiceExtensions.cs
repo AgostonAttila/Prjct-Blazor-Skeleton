@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace WebAPI.Extensions
 {
@@ -28,7 +29,7 @@ namespace WebAPI.Extensions
 			.AddSignInManager<SignInManager<AppUser>>()
 			.AddDefaultTokenProviders();
 
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("JwtSettings").GetSection("securityKey").Value));
 
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			.AddJwtBearer(opt =>

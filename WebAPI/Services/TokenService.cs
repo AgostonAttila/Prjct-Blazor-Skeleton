@@ -27,23 +27,18 @@ namespace WebAPI.Services
 
 		public string CreateToken(AppUser user)
 		{
-			var claims = new List<Claim>
-			{
-				new Claim(ClaimTypes.Name, user.UserName),
-				new Claim(ClaimTypes.NameIdentifier, user.Id),
-				new Claim(ClaimTypes.Email, user.Email),
-			};
-
-			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
-			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+			var claims = GetClaims(user).Result;
 
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
+				Audience = _jwtSettings.GetSection("validAudience").Value,
+				Issuer = _jwtSettings.GetSection("validIssuer").Value,
 				Subject = new ClaimsIdentity(claims),
-				Expires = DateTime.UtcNow.AddMinutes(10),
-				SigningCredentials = creds
+				Expires = DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.GetSection("expiryInMinutes").Value)),
+				SigningCredentials = GetSigningCredentials(),
 			};
 
+			//GenerateTokenOptions(SigningCredentials signingCredentials, List < Claim > claims)
 			var tokenHandler = new JwtSecurityTokenHandler();
 
 			var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -63,7 +58,7 @@ namespace WebAPI.Services
 			var key = Encoding.UTF8.GetBytes(_jwtSettings.GetSection("securityKey").Value);
 			var secret = new SymmetricSecurityKey(key);
 
-			return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+			return new SigningCredentials(secret, SecurityAlgorithms.HmacSha512Signature);
 		}
 
 		public async Task<List<Claim>> GetClaims(AppUser user)

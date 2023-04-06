@@ -287,16 +287,16 @@ namespace WebAPI.Controllers
 		private UserDTO CreateUserObject(AppUser user)
 		{
 
-			var signingCredentials = _tokenService.GetSigningCredentials();
-			var claims =  _tokenService.GetClaims(user);
-			var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims.Result);
-			var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+			//var signingCredentials = _tokenService.GetSigningCredentials();
+			//var claims =  _tokenService.GetClaims(user);
+			//var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims.Result);
+			//var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
 			return new UserDTO
 			{
 				DisplayName = user.DisplayName,
 				Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
-				Token = token,
+				Token = _tokenService.CreateToken(user),
 				Username = user.UserName
 			};
 		}
