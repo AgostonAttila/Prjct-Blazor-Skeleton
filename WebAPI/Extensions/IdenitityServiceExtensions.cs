@@ -38,10 +38,10 @@ namespace WebAPI.Extensions
 				{
 					ValidateIssuerSigningKey = true,
 					IssuerSigningKey = key,
-					ValidateIssuer = false,
-					ValidateAudience = false,
+					ValidateIssuer = true,
+					ValidateAudience = true,
 					ValidateLifetime = true,
-					ClockSkew = TimeSpan.Zero
+					ClockSkew = TimeSpan.Zero				
 				};
 				opt.Events = new JwtBearerEvents
 				{

@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
 		[HttpPost("login")]
 		public async Task<ActionResult<Result<UserDTO>>> Login(LoginDTO loginDTO)
 		{
-			//régi
+		
 			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
 			.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
@@ -53,80 +53,63 @@ namespace WebAPI.Controllers
 			{
 				await SetRefreshToken(user);
 				UserDTO userDTO = CreateUserObject(user);
+				//await _userManager.UpdateAsync(user);
 				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
 			}
 			
 			return Unauthorized("Invalid pwd");
-
-			//var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
-
-			//if (user == null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password))
-			//	return Unauthorized(new Result<UserDTO> { Error = "Invalid Authentication" });
-
-
-			//var signingCredentials = _tokenService.GetSigningCredentials();
-			//var claims = await _tokenService.GetClaims(user);
-			//var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
-			//var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-			//user.RefreshToken = _tokenService.GenerateRefreshToken();
-			//user.RefreshTokens = new List<RefreshToken> { };
-			//await _userManager.UpdateAsync(user);
-
-			//return Ok(new Result<UserDTO> { IsSuccess = true, Value = new UserDTO { RefreshToken = user.RefreshToken, Token = token } });
-
 		}
 
-		[AllowAnonymous]
-		[HttpPost("fbLogin")]
-		public async Task<ActionResult<UserDTO>> FacebookLogin(string accessToken)
-		{
-			var fbVerifyKeys = _config["Facebook:AppId"] + "|" + _config["Facebook:AppSecret"];
+		//[AllowAnonymous]
+		//[HttpPost("fbLogin")]
+		//public async Task<ActionResult<UserDTO>> FacebookLogin(string accessToken)
+		//{
+		//	var fbVerifyKeys = _config["Facebook:AppId"] + "|" + _config["Facebook:AppSecret"];
 
-			var verifyToken = await _httpClient
-				.GetAsync($"debug_token?input_token={accessToken}&access_token={fbVerifyKeys}");
+		//	var verifyToken = await _httpClient
+		//		.GetAsync($"debug_token?input_token={accessToken}&access_token={fbVerifyKeys}");
 
-			if (!verifyToken.IsSuccessStatusCode) return Unauthorized();
+		//	if (!verifyToken.IsSuccessStatusCode) return Unauthorized();
 
-			var fbUrl = $"me?access_token={accessToken}&fields=name,email,picture.width(100).height(100)";
+		//	var fbUrl = $"me?access_token={accessToken}&fields=name,email,picture.width(100).height(100)";
 
-			var response = await _httpClient.GetAsync(fbUrl);
+		//	var response = await _httpClient.GetAsync(fbUrl);
 
-			if (!response.IsSuccessStatusCode) return Unauthorized();
+		//	if (!response.IsSuccessStatusCode) return Unauthorized();
 
-			var fbInfo = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+		//	var fbInfo = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
 
-			var username = (string)fbInfo.id;
+		//	var username = (string)fbInfo.id;
 
-			var user = await _userManager.Users.Include(p => p.Photos)
-				.FirstOrDefaultAsync(x => x.UserName == username);
+		//	var user = await _userManager.Users.Include(p => p.Photos)
+		//		.FirstOrDefaultAsync(x => x.UserName == username);
 
-			if (user != null) return CreateUserObject(user);
+		//	if (user != null) return CreateUserObject(user);
 
-			user = new AppUser
-			{
-				DisplayName = (string)fbInfo.name,
-				Email = (string)fbInfo.email,
-				UserName = (string)fbInfo.id,
-				Bio = " ",
-				Photos = new List<Photo>
-			{
-				new Photo
-				{
-					Id = "fb_" + (string)fbInfo.id,
-					Url = (string)fbInfo.picture.data.url,
-					IsMain = true
-				}}
-			};
+		//	user = new AppUser
+		//	{
+		//		DisplayName = (string)fbInfo.name,
+		//		Email = (string)fbInfo.email,
+		//		UserName = (string)fbInfo.id,
+		//		Bio = " ",
+		//		Photos = new List<Photo>
+		//	{
+		//		new Photo
+		//		{
+		//			Id = "fb_" + (string)fbInfo.id,
+		//			Url = (string)fbInfo.picture.data.url,
+		//			IsMain = true
+		//		}}
+		//	};
 
-			user.EmailConfirmed = true;
+		//	user.EmailConfirmed = true;
 
-			var result = await _userManager.CreateAsync(user);
+		//	var result = await _userManager.CreateAsync(user);
 
-			if (!result.Succeeded) return BadRequest("Problem creating user account");
-			await SetRefreshToken(user);
-			return CreateUserObject(user);
-		}
+		//	if (!result.Succeeded) return BadRequest("Problem creating user account");
+		//	await SetRefreshToken(user);
+		//	return CreateUserObject(user);
+		//}
 
 		[AllowAnonymous]
 		[HttpPost("register")]
@@ -232,31 +215,8 @@ namespace WebAPI.Controllers
 
 			if (oldToken != null && !oldToken.IsActive) return Unauthorized();
 		
-			await _userManager.UpdateAsync(user);
-			return CreateUserObject(user);
-
-			//if (refreshTokenDTO is null)
-			//{
-			//	return BadRequest(new Result<string> { IsSuccess = false, Error = "Invalid client request" });
-			//}
-
-			//var principal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenDTO.Token);
-			//var username = principal.Identity.Name;
-
-			//var user = await _userManager.FindByEmailAsync(username);
-			//if (user == null || user.RefreshToken.Token != refreshTokenDTO.RefreshToken || user.RefreshToken.Expires <= DateTime.Now)
-			//	return BadRequest(new Result<string> { IsSuccess = false, Error = "Invalid client request" });
-
-			//var signingCredentials = _tokenService.GetSigningCredentials();
-			//var claims = await _tokenService.GetClaims(user);
-			//var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims);
-			//var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-			//user.RefreshToken = _tokenService.GenerateRefreshToken();
-
 			//await _userManager.UpdateAsync(user);
-
-			//return Ok( new Result<RefreshTokenDTO> {  Value = new RefreshTokenDTO { Token = token, RefreshToken = user.RefreshToken.Token } ,IsSuccess = true });
-
+			return CreateUserObject(user);			
 		}
 
 		
