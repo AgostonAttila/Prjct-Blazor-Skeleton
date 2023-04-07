@@ -38,8 +38,8 @@ namespace WebAPI.Extensions
 				{
 					ValidateIssuerSigningKey = true,
 					IssuerSigningKey = key,
-					ValidateIssuer = true,
-					ValidateAudience = true,
+					ValidateIssuer = false,
+					ValidateAudience = false,
 					ValidateLifetime = true,
 					ClockSkew = TimeSpan.Zero				
 				};

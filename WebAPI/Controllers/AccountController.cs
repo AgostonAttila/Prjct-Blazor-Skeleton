@@ -10,12 +10,13 @@ using Domain.DTOs;
 using Application.Core;
 using System.IdentityModel.Tokens.Jwt;
 using Domain;
+using API.Controllers;
 
 namespace WebAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AccountController : ControllerBase
+	public class AccountController : BaseApiController
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signInManager;

@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Client;
 using Client.Services;
 using Client.Services.AccountService;
+using Client.Services.TesztService;
 using Client.StateContainers;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -23,6 +24,7 @@ builder.Services.AddScoped(sp => new HttpClient
 
 //Services
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITesztService, TesztService>();
 
 builder.Services.AddScoped<RefreshTokenService>();
 builder.Services.AddHttpClientInterceptor();
