@@ -20,7 +20,7 @@ namespace Client.Services
 		{
 			var absPath = e.Request.RequestUri.AbsolutePath;
 
-			if (!absPath.Contains("token") && !absPath.Contains("accounts"))
+			if (!absPath.Contains("Token") && !absPath.Contains("Accounts"))
 			{
 				var token = await _refreshTokenService.TryRefreshToken();
 
