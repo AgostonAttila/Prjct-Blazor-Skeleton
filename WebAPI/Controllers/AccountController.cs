@@ -24,9 +24,11 @@ namespace WebAPI.Controllers
 		private readonly IConfiguration _config;
 		private readonly HttpClient _httpClient;
 		private readonly EmailSender _emailSender;
+		private readonly IHttpContextAccessor _httpContextAccessor;
+
 		//private readonly IMapper _automapper;
 
-		public AccountController( UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config, EmailSender emailSender)
+		public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config, EmailSender emailSender, IHttpContextAccessor httpContextAccessor)
 		{
 			_emailSender = emailSender;
 			_config = config;
@@ -37,13 +39,14 @@ namespace WebAPI.Controllers
 			{
 				BaseAddress = new System.Uri("https://graph.facebook.com")
 			};
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		[AllowAnonymous]
 		[HttpPost("login")]
 		public async Task<ActionResult<Result<UserDTO>>> Login(LoginDTO loginDTO)
 		{
-		
+
 			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
 			.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
@@ -58,7 +61,7 @@ namespace WebAPI.Controllers
 				//await _userManager.UpdateAsync(user);
 				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
 			}
-			
+
 			return Unauthorized("Invalid pwd");
 		}
 
@@ -165,7 +168,7 @@ namespace WebAPI.Controllers
 
 
 		}
-		
+
 		[AllowAnonymous]
 		[HttpPost("verifyEmail")]
 		public async Task<IActionResult> VerifyEmail(string token, string email)
@@ -200,25 +203,29 @@ namespace WebAPI.Controllers
 
 			return Ok("Email verification link resent");
 		}
-							
+
 		[Authorize]
 		[HttpPost("refreshToken")]
-		public async Task<ActionResult<UserDTO>> RefreshToken()
-		{		
+		public async Task<ActionResult<string>> RefreshToken()
+		{
+
+			var name = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+
 			var refreshToken = Request.Cookies["refreshToken"];
 			var user = await _userManager.Users
 				.Include(r => r.RefreshTokens)
 				.Include(p => p.Photos)
-				.FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
+				.FirstOrDefaultAsync(x => x.Email == name);
 
 			if (user == null) return Unauthorized();
 
 			var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
 
 			if (oldToken != null && !oldToken.IsActive) return Unauthorized();
-		
+
 			//await _userManager.UpdateAsync(user);
-			return CreateUserObject(user);			
+			UserDTO userDTO = CreateUserObject(user);
+			return Ok(new Result<string> { IsSuccess = true, Value = userDTO.Token });		
 		}
 
 		[Authorize]
@@ -231,7 +238,7 @@ namespace WebAPI.Controllers
 				Expires = DateTime.UtcNow.AddDays(7)
 			};
 
-		    Response.Cookies.Delete("refreshToken", cookieOptions);
+			Response.Cookies.Delete("refreshToken", cookieOptions);
 
 			return Ok(new Result<string> { IsSuccess = true, Value = "Logout success" });
 		}
@@ -248,7 +255,7 @@ namespace WebAPI.Controllers
 		private async Task SetRefreshToken(AppUser user)
 		{
 			var refreshToken = _tokenService.GenerateRefreshToken();
-						
+
 			user.RefreshTokens.Add(refreshToken);
 			await _userManager.UpdateAsync(user);
 

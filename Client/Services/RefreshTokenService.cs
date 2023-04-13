@@ -7,11 +7,13 @@ namespace Client.Services
 	{
 		private readonly AuthenticationStateProvider _authProvider;
 		private readonly IAccountService _accountService;
+		private readonly IConfiguration _config;
 
-		public RefreshTokenService(AuthenticationStateProvider authProvider, IAccountService accountService)
+		public RefreshTokenService(AuthenticationStateProvider authProvider, IAccountService accountService, IConfiguration config)
 		{
 			_authProvider = authProvider;
 			_accountService = accountService;
+			_config = config;
 		}
 
 		public async Task<string> TryRefreshToken()
@@ -25,7 +27,10 @@ namespace Client.Services
 			var timeUTC = DateTime.UtcNow;
 
 			var diff = expTime - timeUTC;
-			if (diff.TotalMinutes <= 2)
+
+			//double expMinutes = Convert.ToDouble(_config.GetSection("expiryInMinutes").Value);
+
+			if (diff.TotalMinutes <= 5)
 				return await _accountService.RefreshToken();
 
 			return string.Empty;

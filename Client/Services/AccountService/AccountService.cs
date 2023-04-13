@@ -105,18 +105,24 @@ namespace Client.Services.AccountService
 			var tokenDto = JsonSerializer.Serialize(new RefreshTokenDTO { Token = token, RefreshToken = refreshToken });
 			var bodyContent = new StringContent(tokenDto, Encoding.UTF8, "application/json");
 
-			var refreshResult = await _httpClient.PostAsync("token/refresh", bodyContent);
-			var refreshContent = await refreshResult.Content.ReadAsStringAsync();
-			Result<RefreshTokenDTO> result = JsonSerializer.Deserialize<Result<RefreshTokenDTO>>(refreshContent, _options);
+			var refreshResult = await _httpClient.PostAsync("Account/refreshToken", bodyContent);
 
 			if (!refreshResult.IsSuccessStatusCode)
 				throw new ApplicationException("Something went wrong during the refresh token action");
 
-			await _localStorageService.SetItemAsync("authToken", result.Value.Token);
-			await _localStorageService.SetItemAsync("refreshToken", result.Value.RefreshToken);
+			var refreshContent = await refreshResult.Content.ReadAsStringAsync();
 
-			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value.Token);
-			return result.Value.Token;
+			if (refreshContent != "''")
+			{
+
+				Result<string> result = JsonSerializer.Deserialize<Result<string>>(refreshContent, _options);
+				
+				await _localStorageService.SetItemAsync("authToken", result.Value);
+				//await _localStorageService.SetItemAsync("refreshToken", result.Value.RefreshToken);
+
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value);				
+			}
+			return "";
 		}
 
         public async Task<Result<string>> Register(RegisterDTO registerDTO)

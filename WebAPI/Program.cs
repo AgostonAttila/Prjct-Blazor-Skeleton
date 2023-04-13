@@ -21,7 +21,7 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
 
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
