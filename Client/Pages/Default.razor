@@ -1,5 +1,4 @@
-﻿@page "/"
-@page "/default"
+﻿@page "/default"
 @using Client.Services.AccountService;
 @using Client.Services.TesztService;
 @using Microsoft.AspNetCore.Components.Authorization;
@@ -7,6 +6,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IAccountService IAccountService
 @inject ITesztService ITesztService
+@layout MainLayout
 
 <div class="container-fluid py-4">
 	<div class="row">

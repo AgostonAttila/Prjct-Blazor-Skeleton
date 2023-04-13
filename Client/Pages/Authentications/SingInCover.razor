@@ -68,17 +68,19 @@
 
 @code {
 
-    LoginDTO user = new LoginDTO();
-    string messageCssClass = "";
+	LoginDTO user = new LoginDTO { Email = "user10@example.com", Password = "Pa$$w0rd" } ;
+	string messageCssClass = "";
 
-    protected override void OnInitialized()
-    {
+	protected override void OnInitialized()
+	{
 
-    }
+	}
 
-    async Task HandleLogin()
-    {
-        var result = await AccountService.Login(user);       
+	async Task HandleLogin()
+	{
+		var result = await AccountService.Login(user);
+		if (result.IsSuccess)
+			NavigationManager.NavigateTo("/default");
 	}
 }
 
