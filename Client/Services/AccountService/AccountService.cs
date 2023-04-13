@@ -23,8 +23,8 @@ namespace Client.Services.AccountService
 		private readonly ILocalStorageService _localStorageService;
 		private NavigationManager _navigationManager;
 
-	
-		
+		private static System.Timers.Timer refreshTokenTimer;
+
 
 		public AccountService(HttpClient httpClient, AuthenticationStateProvider authStateProvider, ILocalStorageService localStorageService, NavigationManager navigationManager)
 		{		   
@@ -76,6 +76,8 @@ namespace Client.Services.AccountService
 			await _localStorageService.SetItemAsync("authToken", result.Value.Token);		
 			((CustomAuthStateProvider)_authStateProvider).GetAuthenticationStateAsync();
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value.Token);
+
+			SetRefreshTokenTimer();
 
 			return new Result<UserDTO> { IsSuccess = true };
 		}
@@ -149,6 +151,42 @@ namespace Client.Services.AccountService
         public Task<Result<string>> VerifyEmail(string token, string email)
         {
             throw new NotImplementedException();
-        }
-    }
+		}
+
+		public void SetRefreshTokenTimer() 
+		{
+
+			if (refreshTokenTimer is null)
+			{
+				refreshTokenTimer = new System.Timers.Timer(1000*60*4);
+				refreshTokenTimer.Elapsed += (sender, args) => {
+					RefreshToken();
+				};
+				refreshTokenTimer.AutoReset = true;
+				refreshTokenTimer.Enabled = true;
+			}
+			else
+			{
+				refreshTokenTimer.Stop();
+				refreshTokenTimer.Dispose();
+				refreshTokenTimer = null;
+			}
+
+		}
+
+		public void Dispose() 		
+		{
+			if (refreshTokenTimer is not null)			
+			{
+				refreshTokenTimer.Stop();
+				refreshTokenTimer.Dispose();
+				refreshTokenTimer = null;
+			}
+		}
+
+
+	}
+
+
+		
 }
