@@ -12,10 +12,10 @@ using System.Text.Json;
 
 namespace Client.Services.AccountService
 {
-   
 
-    public class AccountService : IAccountService
-    {
+
+	public class AccountService : IAccountService
+	{
 
 		private readonly HttpClient _httpClient;
 		private readonly AuthenticationStateProvider _authStateProvider;
@@ -27,26 +27,26 @@ namespace Client.Services.AccountService
 
 
 		public AccountService(HttpClient httpClient, AuthenticationStateProvider authStateProvider, ILocalStorageService localStorageService, NavigationManager navigationManager)
-		{		   
-            _httpClient = httpClient;
+		{
+			_httpClient = httpClient;
 			_localStorageService = localStorageService;
 			_navigationManager = navigationManager;
 			_authStateProvider = authStateProvider;
 			_options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 		}
 
-        public Task<Result<UserDTO>> FacebookLogin()
-        {
-            throw new NotImplementedException();
-        }
+		public Task<Result<UserDTO>> FacebookLogin()
+		{
+			throw new NotImplementedException();
+		}
 
-        public async Task<IIdentity> GetCurrentUser()
-        {
+		public async Task<IIdentity> GetCurrentUser()
+		{
 			return (await _authStateProvider.GetAuthenticationStateAsync()).User.Identity;
 		}
 
-        public async Task<Result<UserDTO>> Login(LoginDTO loginDTO)
-        {
+		public async Task<Result<UserDTO>> Login(LoginDTO loginDTO)
+		{
 			//         var result = await _http.PostAsJsonAsync("Account/login", loginDTO);
 
 			//Result<UserDTO> response = await result.Content.ReadFromJsonAsync<Result<UserDTO>>();
@@ -62,8 +62,8 @@ namespace Client.Services.AccountService
 
 			//}
 			//return await result.Content.ReadFromJsonAsync<Result<UserDTO>>();          	
-			
-		    var content = JsonSerializer.Serialize(loginDTO);
+
+			var content = JsonSerializer.Serialize(loginDTO);
 			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
 			var authResult = await _httpClient.PostAsync("Account/login", bodyContent);
@@ -73,11 +73,11 @@ namespace Client.Services.AccountService
 			if (!authResult.IsSuccessStatusCode)
 				return result;
 
-			await _localStorageService.SetItemAsync("authToken", result.Value.Token);		
+			await _localStorageService.SetItemAsync("authToken", result.Value.Token);
 			((CustomAuthStateProvider)_authStateProvider).GetAuthenticationStateAsync();
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value.Token);
 
-			SetRefreshTokenTimer();
+			StartRefreshTokenTimer();
 
 			return new Result<UserDTO> { IsSuccess = true };
 		}
@@ -92,15 +92,18 @@ namespace Client.Services.AccountService
 			//	return result;
 
 			await _localStorageService.RemoveItemAsync("authToken");
-		
+
 			((CustomAuthStateProvider)_authStateProvider).GetAuthenticationStateAsync();
 			_httpClient.DefaultRequestHeaders.Authorization = null;
+
+			StopRefreshTokenTimer();
+
 			_navigationManager.NavigateTo("/");
-			return new Result<string> { IsSuccess = true , Value = "Logout is Success" }; ;
+			return new Result<string> { IsSuccess = true, Value = "Logout is Success" }; ;
 		}
 
 		public async Task<string> RefreshToken()
-        {
+		{
 			var token = await _localStorageService.GetItemAsync<string>("authToken");
 			var refreshToken = await _localStorageService.GetItemAsync<string>("refreshToken");
 
@@ -118,17 +121,17 @@ namespace Client.Services.AccountService
 			{
 
 				Result<string> result = JsonSerializer.Deserialize<Result<string>>(refreshContent, _options);
-				
+
 				await _localStorageService.SetItemAsync("authToken", result.Value);
 				//await _localStorageService.SetItemAsync("refreshToken", result.Value.RefreshToken);
 
-				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value);				
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value);
 			}
 			return "";
 		}
 
-        public async Task<Result<string>> Register(RegisterDTO registerDTO)
-        {
+		public async Task<Result<string>> Register(RegisterDTO registerDTO)
+		{
 			var content = JsonSerializer.Serialize(registerDTO);
 			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
@@ -136,57 +139,56 @@ namespace Client.Services.AccountService
 			Result<string> resultContent = await result.Content.ReadFromJsonAsync<Result<string>>();
 
 			if (!resultContent.IsSuccess)
-			{				
+			{
 				return resultContent;
 			}
 
-			return new Result<string> { IsSuccess = true };			
-        }
-
-        public Task<Result<string>> ResendEmailConfirmationLink(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result<string>> VerifyEmail(string token, string email)
-        {
-            throw new NotImplementedException();
+			return new Result<string> { IsSuccess = true };
 		}
 
-		public void SetRefreshTokenTimer() 
+		public Task<Result<string>> ResendEmailConfirmationLink(string email)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Result<string>> VerifyEmail(string token, string email)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void StartRefreshTokenTimer()
 		{
 
 			if (refreshTokenTimer is null)
 			{
-				refreshTokenTimer = new System.Timers.Timer(1000*60*4);
-				refreshTokenTimer.Elapsed += (sender, args) => {
+				refreshTokenTimer = new System.Timers.Timer(1000 * 60 * 4);
+				refreshTokenTimer.Elapsed += (sender, args) =>
+				{
 					RefreshToken();
 				};
 				refreshTokenTimer.AutoReset = true;
 				refreshTokenTimer.Enabled = true;
 			}
-			else
-			{
-				refreshTokenTimer.Stop();
-				refreshTokenTimer.Dispose();
-				refreshTokenTimer = null;
-			}
-
 		}
 
-		public void Dispose() 		
+		public void StopRefreshTokenTimer()
 		{
-			if (refreshTokenTimer is not null)			
+			if (refreshTokenTimer is not null)
 			{
 				refreshTokenTimer.Stop();
 				refreshTokenTimer.Dispose();
 				refreshTokenTimer = null;
 			}
+		}
+
+		public void Dispose()
+		{
+			StopRefreshTokenTimer();
 		}
 
 
 	}
 
 
-		
+
 }

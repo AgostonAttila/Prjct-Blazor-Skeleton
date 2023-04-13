@@ -18,6 +18,9 @@ namespace Client.Services
 
 		public async Task InterceptBeforeHttpAsync(object sender, HttpClientInterceptorEventArgs e)
 		{
+			//Console.WriteLine("BeforeSend event of HttpClientInterceptor");
+			//Console.WriteLine($"  - {args.Request.Method} {args.Request.RequestUri}");
+
 			var absPath = e.Request.RequestUri.AbsolutePath;
 
 			if (!absPath.Contains("Token") && !absPath.Contains("Account"))
@@ -30,6 +33,26 @@ namespace Client.Services
 				}
 			}
 		}
+
+
+		//public async Task InterceptAfterHttpAsync(object sender, HttpClientInterceptorEventArgs e)
+		//{
+		//Console.WriteLine("AfterSend event of HttpClientInterceptor");
+		//Console.WriteLine($"  - {args.Request.Method} {args.Request.RequestUri}");
+		//Console.WriteLine($"  - HTTP Status {args.Response?.StatusCode}");
+
+		//var capturedContent = await args.GetCapturedContentAsync();
+
+		//Console.WriteLine($"  - Content Headers");
+		//foreach (var headerText in capturedContent.Headers.Select(h => $"{h.Key}: {string.Join(", ", h.Value)}"))
+		//{
+		//	Console.WriteLine($"    - {headerText}");
+		//}
+
+		//var httpContentString = await capturedContent.ReadAsStringAsync();
+		//Console.WriteLine($"  - HTTP Content \"{httpContentString}\"");
+		//}
+
 
 		public void DisposeEvent() => _interceptor.BeforeSendAsync -= InterceptBeforeHttpAsync;
 	}

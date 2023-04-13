@@ -48,17 +48,8 @@ builder.Services.AddSyncfusionBlazor();
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration.GetSection("SyncFusion_API_KEY").Value);
 
 var host =  builder.Build();
-SubscribeHttpClientInterceptorEvents2(host);
+//SubscribeHttpClientInterceptorEvents2(host);
 await host.RunAsync();
-
-
-static void SubscribeHttpClientInterceptorEvents(WebAssemblyHost host)
-{
-	// Subscribe IHttpClientInterceptor's events.
-	var httpInterceptor = host.Services.GetService<IHttpClientInterceptor>();
-	httpInterceptor.BeforeSend += OnBeforeSend;
-	httpInterceptor.AfterSendAsync += OnAfterSendAsync;
-}
 
 static void SubscribeHttpClientInterceptorEvents2(WebAssemblyHost host)
 {
@@ -68,26 +59,3 @@ static void SubscribeHttpClientInterceptorEvents2(WebAssemblyHost host)
 	
 }
 
- static void OnBeforeSend(object sender, HttpClientInterceptorEventArgs args)
-{
-	//Console.WriteLine("BeforeSend event of HttpClientInterceptor");
-	//Console.WriteLine($"  - {args.Request.Method} {args.Request.RequestUri}");	
-}
-
- static async Task OnAfterSendAsync(object sender, HttpClientInterceptorEventArgs args)
-{
-	//Console.WriteLine("AfterSend event of HttpClientInterceptor");
-	//Console.WriteLine($"  - {args.Request.Method} {args.Request.RequestUri}");
-	//Console.WriteLine($"  - HTTP Status {args.Response?.StatusCode}");
-
-	//var capturedContent = await args.GetCapturedContentAsync();
-
-	//Console.WriteLine($"  - Content Headers");
-	//foreach (var headerText in capturedContent.Headers.Select(h => $"{h.Key}: {string.Join(", ", h.Value)}"))
-	//{
-	//	Console.WriteLine($"    - {headerText}");
-	//}
-
-	//var httpContentString = await capturedContent.ReadAsStringAsync();
-	//Console.WriteLine($"  - HTTP Content \"{httpContentString}\"");
-}
