@@ -132,7 +132,7 @@ namespace Client.Services.AccountService
 			var content = JsonSerializer.Serialize(registerDTO);
 			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
-			var result = await _httpClient.PostAsJsonAsync("Account/register", content);
+			var result = await _httpClient.PostAsJsonAsync("Account/register", registerDTO);
 			Result<string> resultContent = await result.Content.ReadFromJsonAsync<Result<string>>();
 
 			if (!resultContent.IsSuccess)

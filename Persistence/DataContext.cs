@@ -22,9 +22,9 @@ namespace Persistence
 			base.OnModelCreating(builder);
 			builder.ApplyConfiguration(new RoleConfiguration());												 
 		}
-		
 
 		
+
 	}
 }
 

@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="NewFolder\" />
     <Folder Include="Pages\Errors\" />
     <Folder Include="Pages\Authentications\" />
   </ItemGroup>

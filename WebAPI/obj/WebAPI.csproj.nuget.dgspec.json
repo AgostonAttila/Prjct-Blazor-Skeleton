@@ -262,6 +262,9 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
+              "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Application\\Application.csproj": {
+                "projectPath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Application\\Application.csproj"
+              },
               "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Domain\\Domain.csproj": {
                 "projectPath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Domain\\Domain.csproj"
               }

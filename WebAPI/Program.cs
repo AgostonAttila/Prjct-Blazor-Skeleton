@@ -3,6 +3,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Writers;
 using Persistence;
 using WebAPI.Extensions;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,13 @@ builder.Services.AddControllers(opt =>
 //    config.RegisterValidatorsFromAssemblyContaining<Create>();
 //});
 
-builder.Services.AddDbContextServiceExtensions(builder.Configuration);
+//builder.Services.AddDbContextServiceExtensions(builder.Configuration);
+
+builder.Services.AddDbContext<DataContext>(options =>
+{
+	options.UseSqlServer("Server=./;Database=skeleton;User Id=sa3;Password=Titkos!;MultipleActiveResultSets=True;");
+});
+
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 

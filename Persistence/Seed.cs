@@ -1,5 +1,7 @@
-﻿using Domain;
+﻿using Application.Core;
+using Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,15 @@ namespace Persistence
 
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
-            if (!userManager.Users.Any() /*&& !context.Activities.Any()*/)
+            try
+            {
+
+            
+
+           bool isAnyUser =  userManager.Users.Any();
+
+
+			if (!isAnyUser /*&& !context.Activities.Any()*/)
             {
                 var users = new List<AppUser>
                 {
@@ -48,6 +58,12 @@ namespace Persistence
                 await context.SaveChangesAsync();
 
             }
-        }
+			}
+			catch (Exception e)
+			{
+
+				//throw new AppException() { Message = e.Message , StatusCode = 400 , Details = e.InnerException.Message } ;
+			}
+		}
     }
 }

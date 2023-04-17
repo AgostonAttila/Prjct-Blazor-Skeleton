@@ -4,7 +4,7 @@ namespace Client.Models.DTOs
 {
 	public class RegisterDTO
 	{
-		[Required]
+		//[Required]
 		public string? DisplayName { get; set; }
 
 		[Required]

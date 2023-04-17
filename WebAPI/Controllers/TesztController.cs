@@ -14,7 +14,7 @@ namespace WebAPI.Controllers
 	[ApiController]
 	public class TesztController : BaseApiController
 	{
-		public TesztController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config, EmailSender emailSender)
+		public TesztController()
 		{
 			
 		}

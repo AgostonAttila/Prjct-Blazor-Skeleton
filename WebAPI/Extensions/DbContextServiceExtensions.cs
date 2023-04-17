@@ -14,6 +14,7 @@ namespace WebAPI.Extensions
 			services.AddDbContext<DataContext>(options =>
 			{
 				var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
 				if (env == "Development")
 				{
 

@@ -11,6 +11,7 @@ using Application.Core;
 using System.IdentityModel.Tokens.Jwt;
 using Domain;
 using API.Controllers;
+using System.Security.Principal;
 
 namespace WebAPI.Controllers
 {
@@ -58,12 +59,17 @@ namespace WebAPI.Controllers
 			{
 				await SetRefreshToken(user);
 				UserDTO userDTO = _tokenService.CreateUserObject(user);
-				//await _userManager.UpdateAsync(user);
+
+				_tokenService.RemoveOldRefreshTokens(user);
+
+				await _userManager.UpdateAsync(user);
 				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
 			}
 
+			
+
 			return Unauthorized("Invalid pwd");
-		}
+		}		
 
 		//[AllowAnonymous]
 		//[HttpPost("fbLogin")]
@@ -127,6 +133,7 @@ namespace WebAPI.Controllers
 			if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
 			{
 				ModelState.AddModelError("email", "Email taken");
+				//sendAlreadyRegisteredEmail
 				return ValidationProblem("Email taken");
 			}
 			if (await _userManager.Users.AnyAsync(x => x.UserName == registerDTO.Username))
@@ -140,6 +147,7 @@ namespace WebAPI.Controllers
 				DisplayName = registerDTO.DisplayName,
 				Email = registerDTO.Email,
 				UserName = registerDTO.Username,
+				Created = DateTime.UtcNow,
 				Bio = " "
 			};
 
@@ -230,7 +238,7 @@ namespace WebAPI.Controllers
 	
 		private async Task SetRefreshToken(AppUser user)
 		{
-			var refreshToken = _tokenService.GenerateRefreshToken();
+			var refreshToken = _tokenService.GenerateRefreshToken(ipAddress());
 
 			user.RefreshTokens.Add(refreshToken);
 			await _userManager.UpdateAsync(user);
@@ -255,5 +263,15 @@ namespace WebAPI.Controllers
 
 			await _emailSender.SendEmailAsync(user.Email, "Please verify email", message);
 		}
+
+		private string ipAddress()
+		{
+			if (Request.Headers.ContainsKey("X-Forwarded-For"))
+				return Request.Headers["X-Forwarded-For"];
+			else
+				return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+		}
+
+		
 	}
 }

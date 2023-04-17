@@ -4,7 +4,9 @@ using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
+using Application.Core;
 using Domain;
 using Domain.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -17,13 +19,17 @@ namespace WebAPI.Services
 
 	public interface ITokenService
 	{
-		public string CreateToken(AppUser user);
-		public RefreshToken GenerateRefreshToken();
-		public SigningCredentials GetSigningCredentials();
-		public Task<List<Claim>> GetClaims(AppUser user);
-		public JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims);
-		public ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
-		public UserDTO CreateUserObject(AppUser user);
+		string CreateToken(AppUser user);
+		RefreshToken GenerateRefreshToken(string ipAddress);
+		SigningCredentials GetSigningCredentials();
+		Task<List<Claim>> GetClaims(AppUser user);
+		JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims);
+		ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+		UserDTO CreateUserObject(AppUser user);
+		void RevokeToken(string token, string ipAddress);
+		void RemoveOldRefreshTokens(AppUser user);
+		void RevokeDescendantRefreshTokens(RefreshToken refreshToken, AppUser user, string ipAddress, string v);
+		RefreshToken RotateRefreshToken(RefreshToken refreshToken, string ipAddress);
 	}
 
 	public class TokenService : ITokenService
@@ -31,12 +37,14 @@ namespace WebAPI.Services
 		private readonly IConfiguration _config;
 		private readonly IConfigurationSection _jwtSettings;
 		private readonly UserManager<AppUser> _userManager;
+		//private readonly AppSettings _appSettings;
 
-		public TokenService(IConfiguration config, UserManager<AppUser> userManager)
+		public TokenService(IConfiguration config, UserManager<AppUser> userManager)//, AppSettings appSettings)
 		{
 			_config = config;
 			_jwtSettings = _config.GetSection("JwtSettings");
 			_userManager = userManager;
+			//_appSettings = appSettings;
 		}
 
 		public string CreateToken(AppUser user)
@@ -60,13 +68,31 @@ namespace WebAPI.Services
 			return tokenHandler.WriteToken(token);
 		}
 
-		public RefreshToken GenerateRefreshToken()
+		public RefreshToken GenerateRefreshToken(string ipAddress)
 		{
-			var randomNumber = new byte[32];
-			using var rng = RandomNumberGenerator.Create();
-			rng.GetBytes(randomNumber);
-			return new RefreshToken { Expires = DateTime.Now.AddDays(7), Token = Convert.ToBase64String(randomNumber) };
+
+			return new RefreshToken
+			{
+				Expires = DateTime.Now.AddDays(7),
+				Token = getUniqueToken(),
+				Created = DateTime.UtcNow,
+				CreatedByIp = ipAddress
+			};
+
+
+			string getUniqueToken()
+			{
+
+				var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+				var tokenIsUnique = true; //!_context.Users.Any(u => u.RefreshTokens.Any(t => t.Token == token));
+
+				if (!tokenIsUnique)
+					return getUniqueToken();
+
+				return token;
+			}
 		}
+
 		public SigningCredentials GetSigningCredentials()
 		{
 			var key = Encoding.UTF8.GetBytes(_jwtSettings.GetSection("securityKey").Value);
@@ -130,7 +156,7 @@ namespace WebAPI.Services
 
 			return principal;
 		}
-				
+
 		public UserDTO CreateUserObject(AppUser user)
 		{
 
@@ -147,5 +173,70 @@ namespace WebAPI.Services
 				Username = user.UserName
 			};
 		}
+
+		public void RevokeToken(string token, string ipAddress)
+		{		
+
+			var user = GetUserByRefreshToken(token);
+			var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+			if (!refreshToken.IsActive)
+				throw new AppException(404,"Invalid token");
+						
+			RevokeRefreshToken(refreshToken, ipAddress, "Revoked without replacement");
+			_userManager.UpdateAsync(user);
+			//_context.SaveChanges();
+		}		
+
+		public void RemoveOldRefreshTokens(AppUser user)
+		{
+			user.RefreshTokens.ToList().RemoveAll(x =>
+			  !x.IsActive &&
+			  x.Created.AddDays(2) <= DateTime.UtcNow);
+		}
+
+		public void RevokeDescendantRefreshTokens(RefreshToken refreshToken, AppUser user, string ipAddress, string reason)
+		{
+			// recursively traverse the refresh token chain and ensure all descendants are revoked
+			if (!string.IsNullOrEmpty(refreshToken.ReplacedByToken))
+			{
+				var childToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken.ReplacedByToken);
+				if (childToken.IsActive)
+					RevokeRefreshToken(childToken, ipAddress, reason);
+				else
+					RevokeDescendantRefreshTokens(childToken, user, ipAddress, reason);
+			}
+		}
+
+		public RefreshToken RotateRefreshToken(RefreshToken refreshToken, string ipAddress)
+		{
+			var newRefreshToken = GenerateRefreshToken(ipAddress);
+			RevokeRefreshToken(refreshToken, ipAddress, "Replaced by new token", newRefreshToken.Token);
+			return newRefreshToken;
+		}
+
+
+
+
+
+		private AppUser GetUserByRefreshToken(string token)
+		{
+			List<AppUser> userList = _userManager.Users.Include(r => r.RefreshTokens).ToList();
+
+			AppUser appUser = null;
+			userList.ForEach(user => { if (user.RefreshTokens.Any(p => p.Token == token)) appUser = user; });
+
+			return appUser;
+		}
+
+		private void RevokeRefreshToken(RefreshToken token, string ipAddress, string reason = null, string replacedByToken = null)
+		{
+			token.Revoked = DateTime.UtcNow;
+			token.RevokedByIp = ipAddress;
+			token.ReasonRevoked = reason;
+			token.ReplacedByToken = replacedByToken;
+		}
+
+		
 	}
 }
