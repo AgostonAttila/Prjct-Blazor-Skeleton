@@ -6,13 +6,27 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Domain;
+using Domain.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
+
 namespace WebAPI.Services
 {
-	public class TokenService
+
+	public interface ITokenService
+	{
+		public string CreateToken(AppUser user);
+		public RefreshToken GenerateRefreshToken();
+		public SigningCredentials GetSigningCredentials();
+		public Task<List<Claim>> GetClaims(AppUser user);
+		public JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims);
+		public ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+		public UserDTO CreateUserObject(AppUser user);
+	}
+
+	public class TokenService : ITokenService
 	{
 		private readonly IConfiguration _config;
 		private readonly IConfigurationSection _jwtSettings;
@@ -115,6 +129,23 @@ namespace WebAPI.Services
 			}
 
 			return principal;
+		}
+				
+		public UserDTO CreateUserObject(AppUser user)
+		{
+
+			//var signingCredentials = _tokenService.GetSigningCredentials();
+			//var claims =  _tokenService.GetClaims(user);
+			//var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims.Result);
+			//var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+			return new UserDTO
+			{
+				DisplayName = user.DisplayName,
+				Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
+				Token = CreateToken(user),
+				Username = user.UserName
+			};
 		}
 	}
 }

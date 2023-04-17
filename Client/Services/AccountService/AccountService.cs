@@ -3,12 +3,14 @@ using Client.Models;
 using Client.Models.DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Newtonsoft.Json.Linq;
 using Syncfusion.Blazor.Kanban.Internal;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 
 namespace Client.Services.AccountService
 {
@@ -104,13 +106,10 @@ namespace Client.Services.AccountService
 
 		public async Task<string> RefreshToken()
 		{
-			var token = await _localStorageService.GetItemAsync<string>("authToken");
-			var refreshToken = await _localStorageService.GetItemAsync<string>("refreshToken");
-
-			var tokenDto = JsonSerializer.Serialize(new RefreshTokenDTO { Token = token, RefreshToken = refreshToken });
-			var bodyContent = new StringContent(tokenDto, Encoding.UTF8, "application/json");
-
-			var refreshResult = await _httpClient.PostAsync("Account/refreshToken", bodyContent);
+			var token = await _localStorageService.GetItemAsync<string>("authToken");				
+			
+			var bodyContent = new StringContent("", Encoding.UTF8, "application/json");
+			var refreshResult = await _httpClient.PostAsync("Token/refreshToken", bodyContent);
 
 			if (!refreshResult.IsSuccessStatusCode)
 				throw new ApplicationException("Something went wrong during the refresh token action");
@@ -122,9 +121,7 @@ namespace Client.Services.AccountService
 
 				Result<string> result = JsonSerializer.Deserialize<Result<string>>(refreshContent, _options);
 
-				await _localStorageService.SetItemAsync("authToken", result.Value);
-				//await _localStorageService.SetItemAsync("refreshToken", result.Value.RefreshToken);
-
+				await _localStorageService.SetItemAsync("authToken", result.Value);			
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value);
 			}
 			return "";
@@ -155,9 +152,13 @@ namespace Client.Services.AccountService
 		{
 			throw new NotImplementedException();
 		}
-
 		public void StartRefreshTokenTimer()
 		{
+
+			//const jwtToken = JSON.parse(atob(user.token.split(".")[1]));
+			//const expires = new Date(jwtToken.exp * 1000);
+			//const timeout = expires.getTime() - Date.now() - 60 * 1000;
+			//this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
 
 			if (refreshTokenTimer is null)
 			{

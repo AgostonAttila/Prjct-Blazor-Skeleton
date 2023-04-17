@@ -1,19 +1,12 @@
-﻿@page "/signincover";
-@using Client.Models.DTOs;
-@using Client.Services.AccountService;
-@using Microsoft.AspNetCore.Components.Authorization;
-@using Blazored.LocalStorage
-
-
-@inject IAccountService AccountService
-@inject ILocalStorageService LocalStorage
-@inject NavigationManager NavigationManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
-
+﻿@page "/"
+@page "/signincover";
 @layout LayoutFullScreen
 
+@inject IAccountService AccountService
+@inject NavigationManager NavigationManager
 
-
+@using Client.Models.DTOs;
+@using Client.Services.AccountService;
 
 <main class="main-content  mt-0">
 	<div class="page-header align-items-start min-vh-50 pt-7 pb-9 m-3 border-radius-lg" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-cover.jpg');">

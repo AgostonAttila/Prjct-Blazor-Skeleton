@@ -70,7 +70,7 @@ namespace WebAPI.Extensions
 			});
 
 			services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
-			services.AddScoped<TokenService>();
+			services.AddScoped<ITokenService,TokenService>();
 			return services;
 		}
 	}

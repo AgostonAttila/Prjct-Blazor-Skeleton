@@ -1,14 +1,12 @@
-﻿@inject IAccountService AccountService
-@inject NavigationManager NavigationManager
-@*@inject ILocalStorageService LocalStorage
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject StateContainer StateContainer*@
+﻿@page "/signupcover";
+@layout LayoutFullScreen
 
-@page "/"
-@page "/signupcover";
+@inject IAccountService AccountService
+@inject NavigationManager NavigationManager
+
 @using Client.Models.DTOs;
 @using Client.Services.AccountService;
-@layout LayoutFullScreen
+
 
 
 

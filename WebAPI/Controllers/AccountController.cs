@@ -19,16 +19,17 @@ namespace WebAPI.Controllers
 	public class AccountController : BaseApiController
 	{
 		private readonly UserManager<AppUser> _userManager;
-		private readonly SignInManager<AppUser> _signInManager;
-		private readonly TokenService _tokenService;
-		private readonly IConfiguration _config;
-		private readonly HttpClient _httpClient;
+		private readonly ITokenService _tokenService;
 		private readonly EmailSender _emailSender;
-		private readonly IHttpContextAccessor _httpContextAccessor;
+
+		private readonly IConfiguration _config;
+		private readonly HttpClient _httpClient;	
+		private readonly SignInManager<AppUser> _signInManager;
+
 
 		//private readonly IMapper _automapper;
 
-		public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config, EmailSender emailSender, IHttpContextAccessor httpContextAccessor)
+		public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IConfiguration config, EmailSender emailSender, IHttpContextAccessor httpContextAccessor)
 		{
 			_emailSender = emailSender;
 			_config = config;
@@ -38,8 +39,7 @@ namespace WebAPI.Controllers
 			_httpClient = new HttpClient
 			{
 				BaseAddress = new System.Uri("https://graph.facebook.com")
-			};
-			_httpContextAccessor = httpContextAccessor;
+			};			
 		}
 
 		[AllowAnonymous]
@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
 			//if (result.Succeeded)
 			{
 				await SetRefreshToken(user);
-				UserDTO userDTO = CreateUserObject(user);
+				UserDTO userDTO = _tokenService.CreateUserObject(user);
 				//await _userManager.UpdateAsync(user);
 				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
 			}
@@ -203,31 +203,7 @@ namespace WebAPI.Controllers
 
 			return Ok("Email verification link resent");
 		}
-
-		[Authorize]
-		[HttpPost("refreshToken")]
-		public async Task<ActionResult<string>> RefreshToken()
-		{
-
-			var name = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-
-			var refreshToken = Request.Cookies["refreshToken"];
-			var user = await _userManager.Users
-				.Include(r => r.RefreshTokens)
-				.Include(p => p.Photos)
-				.FirstOrDefaultAsync(x => x.Email == name);
-
-			if (user == null) return Unauthorized();
-
-			var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
-
-			if (oldToken != null && !oldToken.IsActive) return Unauthorized();
-
-			//await _userManager.UpdateAsync(user);
-			UserDTO userDTO = CreateUserObject(user);
-			return Ok(new Result<string> { IsSuccess = true, Value = userDTO.Token });		
-		}
-
+		
 		[Authorize]
 		[HttpPost("logout")]
 		public async Task<ActionResult<string>> Logout()
@@ -251,7 +227,7 @@ namespace WebAPI.Controllers
 		//	await SetRefreshToken(user); // nem biztos h kell ide mert csak frissiti a böngészőt
 		//	return CreateUserObject(user);
 		//}
-
+	
 		private async Task SetRefreshToken(AppUser user)
 		{
 			var refreshToken = _tokenService.GenerateRefreshToken();
@@ -267,24 +243,7 @@ namespace WebAPI.Controllers
 
 			Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
 		}
-
-		private UserDTO CreateUserObject(AppUser user)
-		{
-
-			//var signingCredentials = _tokenService.GetSigningCredentials();
-			//var claims =  _tokenService.GetClaims(user);
-			//var tokenOptions = _tokenService.GenerateTokenOptions(signingCredentials, claims.Result);
-			//var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-			return new UserDTO
-			{
-				DisplayName = user.DisplayName,
-				Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
-				Token = _tokenService.CreateToken(user),
-				Username = user.UserName
-			};
-		}
-
+			
 		private async Task SendVerificationEmail(AppUser user)
 		{
 			var origin = Request.Headers["origin"];

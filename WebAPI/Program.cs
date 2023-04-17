@@ -16,7 +16,8 @@ builder.Services.AddControllers(opt =>
 //{
 //    config.RegisterValidatorsFromAssemblyContaining<Create>();
 //});
-builder.Services.AddCorsPolicy(builder.Configuration);
+
+builder.Services.AddDbContextServiceExtensions(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
