@@ -8,14 +8,16 @@ A playful project with a few solutions may not be suitable for a sharp project a
 
 - ASP.NET Core 6.0 WebApi
 - Blazor Webassembly .Net 6.0 
+- React (coming soon)
+- Angular (coming soon)
 - Tailwind CSS
 - CT design
 
 ### Server features
 
-- [ ] SOLID principles
-- [ ] ONION architecture
-- [ ] DI
+- [x] SOLID principles
+- [x] ONION architecture
+- [x] DI
 - [ ] Repository pattern (By Entity fw it shouldn't be because it implements the repository pattern and uow)
 - [ ] Entity fw (or Dapper)
 - [ ] CQRS with MediatR
@@ -26,15 +28,15 @@ A playful project with a few solutions may not be suitable for a sharp project a
 - [ ] Automapper
 - [ ] Fluent validation
 - [ ] API Versioning
-- [ ] REST
+- [x] REST
 - [ ] GraphQl
 - [x] Swagger
-- [ ] Wrappers (Pagination,...)
-- [ ] Custom exception handling
-- [ ] Serilog (or NLog or Elmah)
+- [x] Wrappers (Pagination,...)
+- [x] Custom exception handling
+- [x] Serilog (or NLog or Elmah)
 - [x] Microsoft Identity with JWT Authentication
-- [x] Refresh Token
-- [x] Complete User Management Module (Register / Generate Token / Forgot Password / Confirmation Mail)
+- [x] Refresh Token - Revoke Token
+- [ ] Complete User Management Module (Register / Generate Token / Forgot Password / Confirmation Mail)
 - [ ] Two Factor Authentication (Email, SMS, Google Authenticator)
 - [ ] Background job with Hangfire
 - [ ] SMTP / Mailkit / Sendgrid Email Service
@@ -47,30 +49,30 @@ A playful project with a few solutions may not be suitable for a sharp project a
 - [ ] Kubernetes & Docker
 - [ ] LDAP & ADFS
 - [ ] ElasticSearch
-- [ ] MongoDB, Postgre , MySql, Mssql,DB2 ,Oracle ...
+- [x] MongoDB, Postgre , MySql, Mssql,DB2 ,Oracle ...
 - [ ] Benchmark.NET
 - [ ] OWASP
 
 ### Client features
 
-- [ ] Main dashboard screen
-- [ ] Authorization
-- [ ] Authentication
-- [ ] Interactive Charts (Highchart,Google,D3,ChartJs,Morris,...)
-- [ ] Scalable cards
-- [ ] Table (filter,sort,...)
+- [x] Main dashboard screen
+- [x] Authorization
+- [x] Authentication
+- [x] Interactive Charts (Highchart,Google,D3,ChartJs,Morris,...)
+- [x] Scalable cards
+- [x] Table (filter,sort,...)
 - [ ] Google map or Leaf
-- [ ] Themes
+- [x] Themes
 - [ ] Chat
-- [ ] Fonts and Styles
+- [x] Fonts and Styles
 - [ ] PWA
-- [ ] Responsive
+- [x] Responsive
 
 ### Functionality:
 
 - [ ] data from different DBs
-- [ ] charts
+- [x] charts
 - [ ] email sending
 - [ ] chats
 - [ ] machine larining examples
-- [ ] fancy tables
+- [x] fancy tables
