@@ -67,8 +67,7 @@ namespace WebAPI.Controllers
 		[Authorize]
 		[HttpPost("revokeToken")]
 		public async Task<IActionResult> RevokeToken(string refreshToken)
-		{
-			// accept refresh token in request body or cookie
+		{		
 			var token = refreshToken ?? Request.Cookies["refreshToken"];
 
 			if (string.IsNullOrEmpty(token))

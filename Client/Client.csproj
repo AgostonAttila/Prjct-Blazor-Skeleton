@@ -22,9 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NewFolder\" />
     <Folder Include="Pages\Errors\" />
     <Folder Include="Pages\Authentications\" />
+    <Folder Include="SessionTracker\" />
+    <Folder Include="wwwroot\script\" />
   </ItemGroup>
 
 </Project>

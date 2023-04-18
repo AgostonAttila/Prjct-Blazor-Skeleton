@@ -1,8 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.Authorization
 
-<CascadingAuthenticationState>
-	<Router AppAssembly="@typeof(App).Assembly">
+@*CascadingAuthenticationState Name="SessionID" Value="this.ID"*@
+<CascadingAuthenticationState >
+    <Router AppAssembly="@typeof(App).Assembly" >
 		<Found Context="routeData">
 			<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(LayoutFullScreen)">
 				<NotAuthorized>					
@@ -20,7 +21,12 @@
 	</Router>
 </CascadingAuthenticationState>
 
+@code
+{
+   
+	
 
+}
 
 @*<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">

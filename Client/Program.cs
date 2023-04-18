@@ -32,6 +32,7 @@ builder.Services.AddScoped<ITesztService, TesztService>();
 builder.Services.AddScoped<RefreshTokenService>();
 
 
+
 //LocalStorage
 builder.Services.AddBlazoredLocalStorage();
 
