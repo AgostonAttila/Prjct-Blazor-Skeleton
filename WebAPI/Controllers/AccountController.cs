@@ -48,7 +48,7 @@ namespace WebAPI.Controllers
 		public async Task<ActionResult<Result<UserDTO>>> Login(LoginDTO loginDTO)
 		{
 
-			var user = await _userManager.Users.Include(p => p.Photos)  //.FindByEmailAsync(LoginDTO.Email);
+			var user = await _userManager.Users.Include(o=>o.RefreshTokens)  //.FindByEmailAsync(LoginDTO.Email);
 			.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
 
@@ -61,6 +61,7 @@ namespace WebAPI.Controllers
 				UserDTO userDTO = _tokenService.CreateUserObject(user);
 
 				_tokenService.RemoveOldRefreshTokens(user);
+
 
 				await _userManager.UpdateAsync(user);
 				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };

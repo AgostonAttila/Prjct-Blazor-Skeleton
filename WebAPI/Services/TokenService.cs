@@ -193,6 +193,18 @@ namespace WebAPI.Services
 			user.RefreshTokens.ToList().RemoveAll(x =>
 			  !x.IsActive &&
 			  x.Created.AddDays(2) <= DateTime.UtcNow);
+
+
+			for (int i = 0; i < user.RefreshTokens.ToList().Count(); i++)
+			{
+				RefreshToken token = user.RefreshTokens.ToList()[i];
+
+				if (token.IsRevoked)
+				{ user.RefreshTokens.Remove(token); i--; }
+			}
+			
+			//user.RefreshTokens.ToList().RemoveAll(x =>			 
+			//  x.IsRevoked);
 		}
 
 		public void RevokeDescendantRefreshTokens(RefreshToken refreshToken, AppUser user, string ipAddress, string reason)
