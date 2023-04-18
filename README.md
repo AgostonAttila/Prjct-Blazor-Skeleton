@@ -33,7 +33,7 @@ A playful project with a few solutions may not be suitable for a sharp project a
 - [x] Swagger
 - [x] Wrappers (Pagination,...)
 - [x] Custom exception handling
-- [x] Serilog (or NLog or Elmah)
+- [x] Serilog Integration with various Sinks - File, SEQ, Kibana (or NLog or Elmah)
 - [x] Microsoft Identity with JWT Authentication
 - [x] Refresh Token - Revoke Token
 - [ ] Complete User Management Module (Register / Generate Token / Forgot Password / Confirmation Mail)
