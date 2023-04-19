@@ -1,0 +1,9 @@
+{
+    "LoggerSettings": {
+        "AppName": "Skeleton.WebApi",
+        "ElasticSearchUrl": "",
+        "WriteToFile": false,
+        "StructuredConsoleLogging": false,
+        "MinimumLogLevel": "Information"
+    }
+}

@@ -61,7 +61,7 @@ namespace WebAPI.Controllers
 
 			
 			UserDTO userDTO = _tokenService.CreateUserObject(user);
-			return Ok(new Result<string> { IsSuccess = true, Value = userDTO.Token });
+			return Ok(new Result<string> { IsSuccess = true, Data = userDTO.Token });
 		}
 
 		[Authorize]

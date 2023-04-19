@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using Application.Core;
+using Application.Core.Exceptions;
 using Domain;
 using Domain.DTOs;
 using Microsoft.AspNetCore.Identity;

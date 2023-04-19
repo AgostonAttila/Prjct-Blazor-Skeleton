@@ -96,7 +96,7 @@ namespace Infrastructure.Logging
 						 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
 						 .MinimumLevel.Override("Hangfire", LogEventLevel.Warning)
 						 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-						 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information);
+						 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error);
 		}
 
 		private static void SetMinimumLogLevel(LoggerConfiguration serilogConfig, string minLogLevel)

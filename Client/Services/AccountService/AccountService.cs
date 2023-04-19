@@ -75,9 +75,9 @@ namespace Client.Services.AccountService
 			if (!authResult.IsSuccessStatusCode)
 				return result;
 
-			await _localStorageService.SetItemAsync("authToken", result.Value.Token);
+			await _localStorageService.SetItemAsync("authToken", result.Data.Token);
 			((CustomAuthStateProvider)_authStateProvider).GetAuthenticationStateAsync();
-			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value.Token);
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Data.Token);
 
 			StartRefreshTokenTimer();
 
@@ -101,7 +101,7 @@ namespace Client.Services.AccountService
 			StopRefreshTokenTimer();
 
 			_navigationManager.NavigateTo("/");
-			return new Result<string> { IsSuccess = true, Value = "Logout is Success" }; ;
+			return new Result<string> { IsSuccess = true, Data = "Logout is Success" }; ;
 		}
 
 		public async Task<string> RefreshToken()
@@ -121,8 +121,8 @@ namespace Client.Services.AccountService
 
 				Result<string> result = JsonSerializer.Deserialize<Result<string>>(refreshContent, _options);
 
-				await _localStorageService.SetItemAsync("authToken", result.Value);			
-				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Value);
+				await _localStorageService.SetItemAsync("authToken", result.Data);			
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Data);
 			}
 			return "";
 		}

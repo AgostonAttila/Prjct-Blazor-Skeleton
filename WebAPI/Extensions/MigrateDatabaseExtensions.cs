@@ -12,6 +12,7 @@
 					try
 					{
 						var userManager = services.GetRequiredService<UserManager<AppUser>>();
+						appContext.Database.EnsureCreatedAsync().Wait();
 						appContext.Database.MigrateAsync();
 						Seed.SeedData(appContext, userManager);
 					}

@@ -10,6 +10,8 @@ try
 {
 	var builder = WebApplication.CreateBuilder(args);
 
+
+	//builder.AddConfigurations()
 	builder.RegisterSerilog();
 
 	//services
@@ -37,7 +39,9 @@ try
 	builder.Services.AddHttpContextAccessor();
 
 	var app = builder.Build();
-	app.UseMiddleware<ExceptionMiddleware>();
+
+
+	app.UseErrorHandlingMiddleware();
 
 	//biztonsági szûrések XSS stb
 

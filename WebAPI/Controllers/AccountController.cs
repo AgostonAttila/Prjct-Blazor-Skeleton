@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
 
 
 				await _userManager.UpdateAsync(user);
-				return new Result<UserDTO> { IsSuccess = true, Value = userDTO };
+				return new Result<UserDTO> { IsSuccess = true, Data = userDTO };
 			}
 
 			
@@ -167,13 +167,13 @@ namespace WebAPI.Controllers
 			if (!result.Succeeded)
 			{
 				var errors = result.Errors.Select(e => e.Description);
-				return BadRequest(new Result<string> { Error = "Problem registering user" });
+				return BadRequest(new Result<string> { Errors = new List<string> { "Problem registering user" } });
 			}
 
 			await _userManager.AddToRoleAsync(user, "Viewer");
 			//await SendVerificationEmail(user);
 
-			return Ok(new Result<string> { IsSuccess = true, Value = "Registration success - please verify email" });
+			return Ok(new Result<string> { IsSuccess = true, Data = "Registration success - please verify email"  });
 
 
 		}
@@ -225,7 +225,7 @@ namespace WebAPI.Controllers
 
 			Response.Cookies.Delete("refreshToken", cookieOptions);
 
-			return Ok(new Result<string> { IsSuccess = true, Value = "Logout success" });
+			return Ok(new Result<string> { IsSuccess = true, Data = "Logout success" });
 		}
 
 

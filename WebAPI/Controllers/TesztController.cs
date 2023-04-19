@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
 		public async Task<ActionResult<Result<string>>> Teszt1( )
 		{
 
-			return Ok(new Result<string> { IsSuccess = true, Value = "OK tetsz1" });
+			return Ok(new Result<string> { IsSuccess = true, Data = "OK tetsz1" });
 		}
 
 		[Authorize]
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
 		public async Task<ActionResult<Result<string>>> Teszt2()
 		{
 
-			return Ok(new Result<string> { IsSuccess = true, Value = "OK tetsz2" });
+			return Ok(new Result<string> { IsSuccess = true, Data = "OK tetsz2" });
 		}
 	}
 }
