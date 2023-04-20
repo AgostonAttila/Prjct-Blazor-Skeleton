@@ -1,6 +1,6 @@
 ﻿namespace WebAPI.Extensions
 {
-	public static class MigrateDatabaseExtensions
+	public static class MigrateDatabaseExtension
 	{
 		public static  IHost MigrateDatabase(this IHost host)
 		{		

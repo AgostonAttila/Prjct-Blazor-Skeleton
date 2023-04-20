@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Filters
+namespace Infrastructure.Filters
 {
 	public class OnActionExecutingFilter : ActionFilterAttribute
 	{

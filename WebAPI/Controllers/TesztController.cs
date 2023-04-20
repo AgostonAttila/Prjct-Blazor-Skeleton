@@ -1,11 +1,5 @@
 ﻿using API.Controllers;
-using Infrastructure.Email;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-using System.Net.Http;
-using WebAPI.Services;
 using Application.Core;
 
 namespace WebAPI.Controllers

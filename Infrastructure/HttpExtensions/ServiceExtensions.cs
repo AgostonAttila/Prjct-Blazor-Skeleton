@@ -1,9 +1,11 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
-namespace WebAPI.Extensions
+namespace Infrastructure.HttpExtensions
 {
-	public static class HttpExtensions
+
+
+	public static class ServiceExtensions
 	{
 		public static void AddPaginationHeader(this HttpResponse response, int currentPage,
 			int itemsPerPage, int totalItems, int totalPages)

@@ -200,6 +200,10 @@
               "target": "Package",
               "version": "[0.5.1, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
             "Microsoft.AspNetCore.Authorization": {
               "target": "Package",
               "version": "[6.0.15, )"
@@ -267,6 +271,10 @@
             "Serilog.Sinks.MSSqlServer": {
               "target": "Package",
               "version": "[6.3.0, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[6.5.0, )"
             }
           },
           "imports": [

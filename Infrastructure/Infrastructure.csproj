@@ -14,19 +14,17 @@
 
   <ItemGroup>
     <Folder Include="Alphavantage\" />
-    <Folder Include="Caching\" />
-    <Folder Include="BackgroundJobs\" />
     <Folder Include="FileStorage\" />
     <Folder Include="Mapping\" />
     <Folder Include="Auditing\" />
     <Folder Include="Localization\" />
     <Folder Include="Validations\" />
     <Folder Include="Notifications\" />
-    <Folder Include="SignalR\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Figgle" Version="0.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
@@ -44,6 +42,7 @@
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>

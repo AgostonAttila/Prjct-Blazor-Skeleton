@@ -1,17 +1,11 @@
 ﻿using WebAPI.Services;
 using Infrastructure.Email;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Newtonsoft.Json;
-using System.Security.Claims;
 using System.Text;
 using Domain.DTOs;
 using Application.Core;
-using System.IdentityModel.Tokens.Jwt;
-using Domain;
 using API.Controllers;
-using System.Security.Principal;
 
 namespace WebAPI.Controllers
 {

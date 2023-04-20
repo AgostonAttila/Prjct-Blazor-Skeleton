@@ -1,6 +1,5 @@
 ﻿using Figgle;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -10,7 +9,7 @@ using Serilog.Formatting.Compact;
 
 namespace Infrastructure.Logging
 {
-	public static class SerilogExtensions
+	public static class ServiceExtensions
 	{
 
 		

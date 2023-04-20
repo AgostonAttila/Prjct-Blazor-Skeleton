@@ -1,7 +1,6 @@
 ﻿global using System;
 global using System.Threading.Tasks;
 global using WebAPI.Extensions;
-global using Domain;
 global using FluentValidation.AspNetCore;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Builder;
@@ -13,5 +12,5 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Persistence;
-global using WebAPI.Middleware;
-global using WebAPI.SignalR;
+global using Domain;
+

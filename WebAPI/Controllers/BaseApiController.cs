@@ -3,6 +3,7 @@ using Application.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Infrastructure.HttpExtensions;
 
 namespace API.Controllers
 {

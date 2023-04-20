@@ -4,9 +4,6 @@ using API.Controllers;
 using WebAPI.Services;
 using Application.Core;
 using Domain.DTOs;
-using System.Data;
-using System.Security.Principal;
-using System.Xml.Linq;
 
 namespace WebAPI.Controllers
 {

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Application.Core;
 using Application.Core.Exceptions;
-using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace WebAPI.Middleware
+namespace Infrastructure.Middlaware
 {
-    public class ExceptionMiddleware
+	public class ExceptionMiddleware
 	{
 		private readonly RequestDelegate _next;
 		//private readonly ILogger<ExceptionMiddleware> _logger;

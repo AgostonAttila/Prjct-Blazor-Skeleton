@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2u8ymqAFSYd2LDb9ombGI/CL8mRSk0TraXz1yenkHT03lrYtc2I1m1L0PDshth+vIpOIvnzIOtFUOasFtkogoQ==",
+  "dgSpecHash": "O43M8+Aqb4M4LrsSDwW7pKL1pgpiMP1mRWkqqFHB4gh+jDc50CAiuoYcWlrCk3nxEwqJJ0k2utfI4nyeNKSEqw==",
   "success": true,
   "projectFilePath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\WebAPI\\WebAPI.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,7 @@
     "C:\\Users\\DeveloperA\\.nuget\\packages\\k4os.hash.xxhash\\1.0.6\\k4os.hash.xxhash.1.0.6.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\mediatr\\12.0.1\\mediatr.12.0.1.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
-    "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.15\\microsoft.aspnetcore.authentication.jwtbearer.6.0.15.nupkg.sha512",
+    "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.16\\microsoft.aspnetcore.authentication.jwtbearer.6.0.16.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.aspnetcore.authentication.openidconnect\\6.0.15\\microsoft.aspnetcore.authentication.openidconnect.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.aspnetcore.authorization\\6.0.15\\microsoft.aspnetcore.authorization.6.0.15.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.15\\microsoft.aspnetcore.cryptography.internal.6.0.15.nupkg.sha512",
@@ -104,7 +104,7 @@
     "C:\\Users\\DeveloperA\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.2\\sqlitepclraw.provider.e_sqlite3.2.1.2.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\starkbank-ecdsa\\1.3.3\\starkbank-ecdsa.1.3.3.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
-    "C:\\Users\\DeveloperA\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\DeveloperA\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",

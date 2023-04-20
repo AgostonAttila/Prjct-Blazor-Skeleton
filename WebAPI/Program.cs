@@ -1,7 +1,15 @@
 
+using Infrastructure.BackgroundJobs;
+using Infrastructure.Caching;
+using Infrastructure.Cors;
+using Infrastructure.HealthCheck;
 using Infrastructure.Logging;
+using Infrastructure.Middlaware;
+using Infrastructure.SignalR;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using WebAPI.Configurations;
+
 
 
 StaticLogger.EnsureInitialized();
@@ -25,23 +33,34 @@ try
 	//    config.RegisterValidatorsFromAssemblyContaining<Create>();
 	//});
 
-	//builder.Services.AddDbContextServiceExtensions(builder.Configuration);
 
-	builder.Services.AddDbContext<DataContext>(options =>
-	{
-		options.UseSqlServer("Server=./;Database=skeleton;User Id=sa3;Password=Titkos!;TrustServerCertificate=True;");
-	});
-
-	builder.Services.AddApplicationServices(builder.Configuration);
+	////.AddApiVersioning()
 	builder.Services.AddIdentityServices(builder.Configuration);
-
-
+	builder.Services.AddSwaggerExtension();
+	builder.Services.AddAppSettings(builder.Configuration);
+	builder.Services.AddBackgroundJobs(builder.Configuration);
+	builder.Services.AddCaching(builder.Configuration);
+	builder.Services.AddCorsPolicy();
+	//builder.Services.AddExceptionMiddleware();
+	////.AddBehaviours(applicationAssembly)
+	builder.Services.AddHealthChecks();
+	///////AddPOLocalization(config)
+	////.AddMailing(config)
+	////.AddMediatR(Assembly.GetExecutingAssembly())
+	////.AddMultitenancy()
+	////.AddNotifications(config)
+	////.AddOpenApiDocumentation(config)
+	builder.Services.AddPersistence(builder.Configuration);
+	////builder.Services.AddRequestLogging(config)
+	builder.Services.AddRouting(options => options.LowercaseUrls = true);
+	
+	builder.Services.AddOwnServices();
 	builder.Services.AddHttpContextAccessor();
 
 	var app = builder.Build();
 
 
-	app.UseErrorHandlingMiddleware();
+	app.UseExceptionMiddleware();
 
 	//biztonsági szûrések XSS stb
 
@@ -61,7 +80,7 @@ try
 		});
 	}
 
-	app.UseCors("CorsPolicy");
+	app.UseCorsPolicy();
 
 	app.UseDefaultFiles();
 	app.UseStaticFiles();
@@ -71,13 +90,14 @@ try
 		RequestPath = new PathString("/StaticFiles")
 	});
 
-
+	
 
 	app.UseAuthentication();
 	app.UseAuthorization();
 
 	//app.UseHttpsRedirection();
 
+	app.UseHealthChecks();
 
 	app.MapControllers();
 	app.MapHub<ChatHub>("/chat");

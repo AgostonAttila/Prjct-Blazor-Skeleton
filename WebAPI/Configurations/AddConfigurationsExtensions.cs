@@ -1,7 +1,17 @@
-﻿namespace WebAPI.Configurations
+﻿using Application.Core;
+
+namespace WebAPI.Configurations
 {
 	public static class AddConfigurationsExtensions
 	{
+
+		public static IServiceCollection AddAppSettings(this IServiceCollection services, IConfiguration config)
+		{
+
+			services.Configure<AppSettings>(config.GetSection("AppSettings"));
+			return services;
+		}
+
 		public static WebApplicationBuilder AddConfigurations(this WebApplicationBuilder builder)
 		{
 			const string configurationsDirectory = "Configurations";

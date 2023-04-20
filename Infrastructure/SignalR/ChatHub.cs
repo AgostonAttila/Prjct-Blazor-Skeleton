@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
+﻿
 using Microsoft.AspNetCore.SignalR;
 
-namespace WebAPI.SignalR
+namespace Infrastructure.SignalR
 {
 	public class ChatHub : Hub
 	{

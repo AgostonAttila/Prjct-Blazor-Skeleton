@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using WebAPI.Services;
+﻿using System.Text;
 using Domain;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,11 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace WebAPI.Extensions
 {
-	public static class IdenitityServiceExtensions
+	public static class ServiceExtensions
 	{
 		public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
 		{
@@ -70,7 +66,7 @@ namespace WebAPI.Extensions
 			});
 
 			services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
-			services.AddScoped<ITokenService,TokenService>();
+			
 			return services;
 		}
 	}
