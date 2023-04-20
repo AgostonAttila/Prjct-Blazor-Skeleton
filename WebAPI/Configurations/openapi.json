@@ -1,0 +1,14 @@
+{
+    "SwaggerSettings": {
+        "Enable": true,
+        "Title": "Skeleton WebAPI",
+        "Version": "1.0.0",
+        "Description": "Clean Architecture Template for .NET 6 WebApi with lot of services",
+        "ContactName": "Attila Agoston",
+        "ContactEmail": "",
+        "ContactUrl": "",
+        "License": true,
+        "LicenseName": "",
+        "LicenseUrl": ""
+    }
+}

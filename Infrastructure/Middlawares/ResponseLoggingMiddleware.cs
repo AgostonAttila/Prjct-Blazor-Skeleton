@@ -1,0 +1,55 @@
+﻿using Microsoft.AspNetCore.Http;
+using Serilog.Context;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Domain;
+
+namespace Infrastructure.Middlawares
+{
+	public class ResponseLoggingMiddleware : IMiddleware
+	{
+		private readonly AppUser _currentUser;
+
+		public ResponseLoggingMiddleware(AppUser currentUser) => _currentUser = currentUser;
+
+		public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
+		{
+			await next(httpContext);
+			var originalBody = httpContext.Response.Body;
+			using var newBody = new MemoryStream();
+			httpContext.Response.Body = newBody;
+			string responseBody;
+			if (httpContext.Request.Path.ToString().Contains("tokens"))
+			{
+				responseBody = "[Redacted] Contains Sensitive Information.";
+			}
+			else if (httpContext.Request.Path.ToString().Contains("jobs"))
+			{
+				newBody.Seek(0, SeekOrigin.Begin);
+				await newBody.CopyToAsync(originalBody);
+				return;
+			}
+			else
+			{
+				newBody.Seek(0, SeekOrigin.Begin);
+				responseBody = await new StreamReader(httpContext.Response.Body).ReadToEndAsync();
+			}
+
+			string email = _currentUser.Email is string userEmail ? userEmail : "Anonymous";
+			var userId = _currentUser.Id;		
+			if (userId != String.Empty) LogContext.PushProperty("UserId", userId);
+			LogContext.PushProperty("UserEmail", email);			
+			LogContext.PushProperty("StatusCode", httpContext.Response.StatusCode);
+			LogContext.PushProperty("ResponseTimeUTC", DateTime.UtcNow);
+			Log.ForContext("ResponseHeaders", httpContext.Response.Headers.ToDictionary(h => h.Key, h => h.Value.ToString()), destructureObjects: true)
+		   .ForContext("ResponseBody", responseBody)
+		   .Information("HTTP {RequestMethod} Request to {RequestPath} by {RequesterEmail} has Status Code {StatusCode}.", httpContext.Request.Method, httpContext.Request.Path, string.IsNullOrEmpty(email) ? "Anonymous" : email, httpContext.Response.StatusCode);
+			newBody.Seek(0, SeekOrigin.Begin);
+			await newBody.CopyToAsync(originalBody);
+		}
+	}
+}

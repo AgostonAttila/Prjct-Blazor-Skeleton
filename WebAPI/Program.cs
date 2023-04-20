@@ -19,8 +19,8 @@ try
 	var builder = WebApplication.CreateBuilder(args);
 
 
-	//builder.AddConfigurations()
-	builder.RegisterSerilog();
+	
+	builder.AddConfigurations().RegisterSerilog();
 
 	//services
 	builder.Services.AddControllers(opt =>
