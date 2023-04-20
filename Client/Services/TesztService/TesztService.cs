@@ -20,7 +20,7 @@ namespace Client.Services.TesztService
 		public async Task<Result<string>> Teszt1()
 		{
 			
-			var result = await _httpClient.GetAsync("Teszt/teszt1");
+			var result = await _httpClient.GetAsync("teszt/teszt1");
 			var content = await result.Content.ReadAsStringAsync();
 			var resultJSON = JsonSerializer.Deserialize<Result<string>>(content);
 			return new Result<string> { IsSuccess = true, Data = resultJSON?.Data }; 
@@ -29,7 +29,7 @@ namespace Client.Services.TesztService
 		public async Task<Result<string>> Teszt2()
 		{
 
-			var result = await _httpClient.GetAsync("Teszt/teszt2");
+			var result = await _httpClient.GetAsync("teszt/teszt2");
 			var content = await result.Content.ReadAsStringAsync();
 			var resultJSON = JsonSerializer.Deserialize<Result<string>>(content);
 			return new Result<string> { IsSuccess = true, Data = resultJSON?.Data };

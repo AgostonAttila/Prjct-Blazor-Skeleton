@@ -68,7 +68,7 @@ namespace Client.Services.AccountService
 			var content = JsonSerializer.Serialize(loginDTO);
 			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
-			var authResult = await _httpClient.PostAsync("Account/login", bodyContent);
+			var authResult = await _httpClient.PostAsync("account/login", bodyContent);
 			var authContent = await authResult.Content.ReadAsStringAsync();
 			var result = JsonSerializer.Deserialize<Result<UserDTO>>(authContent, _options);
 
@@ -109,7 +109,7 @@ namespace Client.Services.AccountService
 			var token = await _localStorageService.GetItemAsync<string>("authToken");				
 			
 			var bodyContent = new StringContent("", Encoding.UTF8, "application/json");
-			var refreshResult = await _httpClient.PostAsync("Token/refreshToken", bodyContent);
+			var refreshResult = await _httpClient.PostAsync("token/refreshToken", bodyContent);
 
 			if (!refreshResult.IsSuccessStatusCode)
 				throw new ApplicationException("Something went wrong during the refresh token action");
@@ -132,7 +132,7 @@ namespace Client.Services.AccountService
 			var content = JsonSerializer.Serialize(registerDTO);
 			var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
-			var result = await _httpClient.PostAsJsonAsync("Account/register", registerDTO);
+			var result = await _httpClient.PostAsJsonAsync("account/register", registerDTO);
 			Result<string> resultContent = await result.Content.ReadFromJsonAsync<Result<string>>();
 
 			if (!resultContent.IsSuccess)

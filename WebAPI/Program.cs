@@ -52,8 +52,7 @@ try
 	////.AddOpenApiDocumentation(config)
 	builder.Services.AddPersistence(builder.Configuration);
 	////builder.Services.AddRequestLogging(config)
-	builder.Services.AddRouting(options => options.LowercaseUrls = true);
-	
+	builder.Services.AddRouting(options => options.LowercaseUrls = true);	
 	builder.Services.AddOwnServices();
 	builder.Services.AddHttpContextAccessor();
 
