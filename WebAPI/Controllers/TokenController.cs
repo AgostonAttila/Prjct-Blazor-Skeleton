@@ -4,6 +4,7 @@ using API.Controllers;
 using WebAPI.Services;
 using Application.Core;
 using Domain.DTOs;
+using Infrastructure.Identity;
 
 namespace WebAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace WebAPI.Controllers
 		public async Task<ActionResult<string>> RefreshToken()
 		{
 
-			var name = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+			var name =     _httpContextAccessor.HttpContext?.User.GetFirstName();
 
 			var refreshToken = Request.Cookies["refreshToken"];
 			var user = await _userManager.Users
@@ -70,7 +71,7 @@ namespace WebAPI.Controllers
 			if (string.IsNullOrEmpty(token))
 				return BadRequest(new { message = "Token is required" });
 
-			var name = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+			var name = _httpContextAccessor.HttpContext?.User.GetFirstName();
 			var user = await _userManager.Users
 					.Include(r => r.RefreshTokens)
 					.FirstOrDefaultAsync(x => x.Email == name);			

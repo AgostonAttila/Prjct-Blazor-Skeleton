@@ -16,13 +16,10 @@ StaticLogger.EnsureInitialized();
 Log.Information("Server Booting Up...");
 try
 {
-	var builder = WebApplication.CreateBuilder(args);
-
-
-	
+	var builder = WebApplication.CreateBuilder(args);	
 	builder.AddConfigurations().RegisterSerilog();
 
-	//services
+
 	builder.Services.AddControllers(opt =>
 	{
 		var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -33,6 +30,10 @@ try
 	//    config.RegisterValidatorsFromAssemblyContaining<Create>();
 	//});
 
+
+	//compress + 2FA + mail + reset pwd +törlés cookieból bezáráskor
+	//cahce hangfire localization notification olvasni 
+	//api versioning
 
 	////.AddApiVersioning()
 	builder.Services.AddIdentityServices(builder.Configuration);
@@ -46,8 +47,7 @@ try
 	builder.Services.AddHealthChecks();
 	///////AddPOLocalization(config)
 	////.AddMailing(config)
-	////.AddMediatR(Assembly.GetExecutingAssembly())
-	////.AddMultitenancy()
+	////.AddMediatR(Assembly.GetExecutingAssembly())	
 	////.AddNotifications(config)
 	////.AddOpenApiDocumentation(config)
 	builder.Services.AddPersistence(builder.Configuration);
@@ -66,8 +66,7 @@ try
 	// Configure the HTTP request pipeline.
 	if (app.Environment.IsDevelopment())
 	{
-		app.UseSwagger();
-		app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+		app.UseUseSwaggerExt();
 		app.UseDeveloperExceptionPage();
 	}
 	else

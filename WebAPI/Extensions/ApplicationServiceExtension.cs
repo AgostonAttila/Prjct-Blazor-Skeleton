@@ -13,8 +13,7 @@ namespace WebAPI.Extensions
 			services.AddTransient<ISerializerService, NewtonSoftService>();
 			services.AddScoped<ITokenService, TokenService>();
 			//services.AddMediatR(typeof(List.Handler).Assembly);
-			//services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-			services.AddScoped<IUserAccessor, UserAccessor>();	
+			//services.AddAutoMapper(typeof(MappingProfiles).Assembly);		
 			services.AddScoped<EmailSender>();
 			services.AddSignalR();
 

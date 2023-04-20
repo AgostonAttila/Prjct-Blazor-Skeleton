@@ -11,12 +11,9 @@ namespace Infrastructure.Identity
 	{
 		public const string Admin = nameof(Admin);
 		public const string Basic = nameof(Basic);
+		public const string Viewer = nameof(Viewer);
 
-		public static IReadOnlyList<string> DefaultRoles { get; } = new ReadOnlyCollection<string>(new[]
-		{
-		Admin,
-		Basic
-	});
+		public static IReadOnlyList<string> DefaultRoles { get; } = new ReadOnlyCollection<string>(new[] { Admin, Basic, Viewer });
 
 		public static bool IsDefault(string roleName) => DefaultRoles.Any(r => r == roleName);
 	}
