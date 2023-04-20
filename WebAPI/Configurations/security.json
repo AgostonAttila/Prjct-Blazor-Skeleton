@@ -1,11 +1,26 @@
 {
     "SecuritySettings": {
         "Provider": "Jwt",
-        "RequireConfirmedAccount": true,
+        "RequireConfirmedAccount": false,
+        "RequireConfirmedEmail": false,
+        "Lockout": true,
+        "LockoutAllowedForNewUsers": true,
+        "LockoutMaxFailedAccessAttempts": 3,
+        "LockoutDefaultLockoutTimeSpan": 30,
+        "PasswordRequiredUniqueChars": 2,
+        "PasswordRequireDigit": true,
+        "PasswordRequireNonAlphanumeric": true,
+        "PasswordRequiredLength": 8,
+        "PasswordRequireUppercase": true,
+        "PasswordRequireLowercase": true,
+        "PasswordRequireUniqueEmail": true,
         "JwtSettings": {
-            "key": "S0M3RAN0MS3CR3T!1!MAG1C!1!",
+            "key": "super secret key",
             "tokenExpirationInMinutes": 20,
-            "refreshTokenExpirationInDays": 7
+            "refreshTokenExpirationInDays": 7,
+            "refreshTokenRemoveInDays": 7,
+            "validIssuer": "Skeleton AA",
+            "validAudience": "https://localhost:7009"
         },
         "AzureAd": {
             "Instance": "https://login.microsoftonline.com/",

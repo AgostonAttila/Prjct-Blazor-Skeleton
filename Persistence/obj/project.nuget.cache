@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "C58GQZYC1a5+XbPPl7t65Yw+Oy2TSuonHwH4gDNNUa88KHJiWul2vrgUugp1zgUKwZ4mep2aPhW9r6s+//T4Vg==",
+  "dgSpecHash": "hxqgYquEl+ABXc0u7YVYyydOuY6x0xgA81ppvLtoHlBXdTRM01ICr84d5jl/3sDepbm6cPMurnznf/rIvxpevw==",
   "success": true,
   "projectFilePath": "E:\\Programming\\Projects\\Prjct-Blazor-Skeleton\\Persistence\\Persistence.csproj",
   "expectedPackageFiles": [
@@ -56,6 +56,7 @@
     "C:\\Users\\DeveloperA\\.nuget\\packages\\npgsql\\6.0.8\\npgsql.6.0.8.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\6.0.8\\npgsql.entityframeworkcore.postgresql.6.0.8.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
+    "C:\\Users\\DeveloperA\\.nuget\\packages\\serilog\\2.12.0\\serilog.2.12.0.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.2\\sqlitepclraw.bundle_e_sqlite3.2.1.2.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\sqlitepclraw.core\\2.1.2\\sqlitepclraw.core.2.1.2.nupkg.sha512",
     "C:\\Users\\DeveloperA\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.2\\sqlitepclraw.lib.e_sqlite3.2.1.2.nupkg.sha512",

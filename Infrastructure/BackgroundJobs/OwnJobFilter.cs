@@ -1,5 +1,7 @@
-﻿using Hangfire.Client;
+﻿using Application;
+using Hangfire.Client;
 using Hangfire.Logging;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -32,7 +34,7 @@ namespace Infrastructure.BackgroundJobs
 			_ = httpContext ?? throw new InvalidOperationException("Can't create a Job without HttpContext.");
 
 		
-			string? userId = httpContext.User..GetUserId();
+			string? userId = httpContext.User.GetUserId();
 			context.SetJobParameter(QueryStringKeys.UserId, userId);
 		}
 

@@ -20,8 +20,8 @@
             "WorkerCount": 5
         },
         "Storage": {
-            "StorageProvider": "postgresql",
-            "ConnectionString": "Host=localhost;Port=5432;Database=fshDb;Username=postgres;Password=admin;Include Error Detail=true",
+            "StorageProvider": "mssql",
+            "ConnectionString": "Server=./;Database=skeletonhangfire;User Id=sa3;Password=Titkos!;TrustServerCertificate=True;",
             "Options": {
                 "CommandBatchMaxTimeout": "00:05:00",
                 "QueuePollInterval": "00:00:01",

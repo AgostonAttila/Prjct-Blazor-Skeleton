@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Application.Core.Exceptions;
 using Domain.DTOs;
+using Infrastructure.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 
@@ -27,17 +28,17 @@ namespace WebAPI.Services
 
 	public class TokenService : ITokenService
 	{
-		private readonly IConfiguration _config;
-		private readonly IConfigurationSection _jwtSettings;
+	
 		private readonly UserManager<AppUser> _userManager;
-		//private readonly AppSettings _appSettings;
+		private SecuritySettings _securitySettings;
 
-		public TokenService(IConfiguration config, UserManager<AppUser> userManager)//, AppSettings appSettings)
-		{
-			_config = config;
-			_jwtSettings = _config.GetSection("JwtSettings");
+		public TokenService(IConfiguration config, UserManager<AppUser> userManager)
+		{					
 			_userManager = userManager;
-			//_appSettings = appSettings;
+
+			_securitySettings = config.GetSection("SecuritySettings").Get<SecuritySettings>();
+			if (_securitySettings is null) throw new Exception("SecuritySettings Provider is not configured.");
+			if (string.IsNullOrEmpty(_securitySettings.JwtSettings.key)) throw new Exception("SecuritySettings is not configured.");
 		}
 
 		public string CreateToken(AppUser user)
@@ -46,10 +47,10 @@ namespace WebAPI.Services
 
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
-				Audience = _jwtSettings.GetSection("validAudience").Value,
-				Issuer = _jwtSettings.GetSection("validIssuer").Value,
+				Audience = _securitySettings.JwtSettings.validAudience,
+				Issuer = _securitySettings.JwtSettings.validIssuer,
 				Subject = new ClaimsIdentity(claims),
-				Expires = DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.GetSection("expiryInMinutes").Value)),
+				Expires = DateTime.Now.AddMinutes(Convert.ToDouble(_securitySettings.JwtSettings.tokenExpirationInMinutes)),
 				SigningCredentials = GetSigningCredentials(),
 			};
 
@@ -66,7 +67,7 @@ namespace WebAPI.Services
 
 			return new RefreshToken
 			{
-				Expires = DateTime.Now.AddDays(7),
+				Expires = DateTime.Now.AddDays(_securitySettings.JwtSettings.refreshTokenExpirationInDays),
 				Token = getUniqueToken(),
 				Created = DateTime.UtcNow,
 				CreatedByIp = ipAddress
@@ -88,7 +89,7 @@ namespace WebAPI.Services
 
 		public SigningCredentials GetSigningCredentials()
 		{
-			var key = Encoding.UTF8.GetBytes(_jwtSettings.GetSection("securityKey").Value);
+			var key = Encoding.UTF8.GetBytes(_securitySettings.JwtSettings.key);
 			var secret = new SymmetricSecurityKey(key);
 
 			return new SigningCredentials(secret, SecurityAlgorithms.HmacSha512Signature);
@@ -113,10 +114,10 @@ namespace WebAPI.Services
 		public JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
 		{
 			var tokenOptions = new JwtSecurityToken(
-				issuer: _jwtSettings.GetSection("validIssuer").Value,
-				audience: _jwtSettings.GetSection("validAudience").Value,
+				issuer: _securitySettings.JwtSettings.validIssuer,
+				audience: _securitySettings.JwtSettings.validAudience,
 				claims: claims,
-				expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.GetSection("expiryInMinutes").Value)),
+				expires: DateTime.Now.AddMinutes(Convert.ToDouble(_securitySettings.JwtSettings.tokenExpirationInMinutes)),
 				signingCredentials: signingCredentials);
 
 			return tokenOptions;
@@ -130,10 +131,10 @@ namespace WebAPI.Services
 				ValidateIssuer = true,
 				ValidateIssuerSigningKey = true,
 				IssuerSigningKey = new SymmetricSecurityKey(
-					Encoding.UTF8.GetBytes(_jwtSettings.GetSection("securityKey").Value)),
+					Encoding.UTF8.GetBytes(_securitySettings.JwtSettings.key)),
 				ValidateLifetime = false,
-				ValidIssuer = _jwtSettings.GetSection("validIssuer").Value,
-				ValidAudience = _jwtSettings.GetSection("validAudience").Value,
+				ValidIssuer = _securitySettings.JwtSettings.validIssuer,
+				ValidAudience = _securitySettings.JwtSettings.validAudience,
 			};
 
 			var tokenHandler = new JwtSecurityTokenHandler();
@@ -185,7 +186,7 @@ namespace WebAPI.Services
 		{
 			user.RefreshTokens.ToList().RemoveAll(x =>
 			  !x.IsActive &&
-			  x.Created.AddDays(2) <= DateTime.UtcNow);
+			  x.Created.AddDays(_securitySettings.JwtSettings.refreshTokenRemoveInDays) <= DateTime.UtcNow);
 
 
 			for (int i = 0; i < user.RefreshTokens.ToList().Count(); i++)
