@@ -39,7 +39,7 @@ try
 	builder.Services.AddSwaggerExtension();
 	builder.Services.AddAppSettings(builder.Configuration);
 	builder.Services.AddBackgroundJobs(builder.Configuration);
-	builder.Services.AddCaching(builder.Configuration);
+	//builder.Services.AddCaching(builder.Configuration);
 	builder.Services.AddCorsPolicy();
 	//builder.Services.AddExceptionMiddleware();
 	////.AddBehaviours(applicationAssembly)

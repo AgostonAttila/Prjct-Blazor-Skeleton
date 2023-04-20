@@ -17,8 +17,17 @@ namespace WebAPI.Extensions
 		{
 			services.AddIdentityCore<AppUser>(opt =>
 			{
-				opt.Password.RequireNonAlphanumeric = false;
-				opt.SignIn.RequireConfirmedEmail = true;
+				opt.Lockout.AllowedForNewUsers = true;
+				opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+				opt.Lockout.MaxFailedAccessAttempts = 3;
+				opt.Password.RequireNonAlphanumeric = true;
+				opt.Password.RequiredUniqueChars = 1;
+				opt.Password.RequireDigit = true;
+				opt.Password.RequiredLength = 8;
+				opt.Password.RequireUppercase = true;
+				opt.Password.RequireUppercase = true;
+				opt.SignIn.RequireConfirmedEmail = false;
+				opt.User.RequireUniqueEmail = true;			
 			})
 			.AddRoles<IdentityRole>()
 			.AddEntityFrameworkStores<DataContext>()

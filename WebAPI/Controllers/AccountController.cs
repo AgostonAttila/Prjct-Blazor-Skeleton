@@ -48,8 +48,9 @@ namespace WebAPI.Controllers
 
 			if (user == null) return Unauthorized("Invalid email");
 			//if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
-			//var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
-			//if (result.Succeeded)
+			//var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, loginDTO.RememberMe, lockoutOnFailure: true);
+			var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, lockoutOnFailure : true);
+			if (result.Succeeded)
 			{
 				await SetRefreshToken(user);
 				UserDTO userDTO = _tokenService.CreateUserObject(user);
@@ -61,7 +62,15 @@ namespace WebAPI.Controllers
 				return new Result<UserDTO> { IsSuccess = true, Data = userDTO };
 			}
 
-			
+			if (result.IsLockedOut)
+			{
+				//var forgotPassLink = Url.Action(nameof(ForgotPassword), "Account", new { }, Request.Scheme);
+				//var content = string.Format("Your account is locked out, to reset your password, please click this link: {0}", forgotPassLink);
+				//var message = new Message(new string[] { userModel.Email }, "Locked out account information", content, null);
+				//await _emailSender.SendEmailAsync(message);
+				//ModelState.AddModelError("", "The account is locked out");
+				return Unauthorized("The account is locked out");
+			}
 
 			return Unauthorized("Invalid pwd");
 		}		
