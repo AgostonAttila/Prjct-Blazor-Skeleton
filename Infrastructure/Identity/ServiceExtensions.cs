@@ -46,7 +46,8 @@ namespace WebAPI.Extensions
 					ValidateIssuer = false,
 					ValidateAudience = false,
 					ValidateLifetime = true,
-					ClockSkew = TimeSpan.Zero				
+					ClockSkew = TimeSpan.Zero	
+					
 				};
 				opt.Events = new JwtBearerEvents
 				{
