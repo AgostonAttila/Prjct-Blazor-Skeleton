@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Application;
+using Hangfire;
+using Hangfire.Console;
+using Hangfire.Console.Extensions;
+using Hangfire.MySql;
+using Hangfire.PostgreSql;
+using Hangfire.SQLite;
+using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -11,63 +19,63 @@ namespace Infrastructure.BackgroundJobs
 
 		public static IServiceCollection AddBackgroundJobs(this IServiceCollection services, IConfiguration config)
 		{
-			//services.AddHangfireServer(options => config.GetSection("HangfireSettings:Server").Bind(options));
+			services.AddHangfireServer(options => config.GetSection("HangfireSettings:Server").Bind(options));
 
-			//services.AddHangfireConsoleExtensions();
+			services.AddHangfireConsoleExtensions();
 
-			//var storageSettings = config.GetSection("HangfireSettings:Storage").Get<HangfireStorageSettings>();
-			//if (storageSettings is null) throw new Exception("Hangfire Storage Provider is not configured.");
-			//if (string.IsNullOrEmpty(storageSettings.StorageProvider)) throw new Exception("Hangfire Storage Provider is not configured.");
-			//if (string.IsNullOrEmpty(storageSettings.ConnectionString)) throw new Exception("Hangfire Storage Provider ConnectionString is not configured.");
-			//_logger.Information($"Hangfire: Current Storage Provider : {storageSettings.StorageProvider}");
-			//_logger.Information("For more Hangfire storage, visit https://www.hangfire.io/extensions.html");
+			var storageSettings = config.GetSection("HangfireSettings:Storage").Get<HangfireStorageSettings>();
+			if (storageSettings is null) throw new Exception("Hangfire Storage Provider is not configured.");
+			if (string.IsNullOrEmpty(storageSettings.StorageProvider)) throw new Exception("Hangfire Storage Provider is not configured.");
+			if (string.IsNullOrEmpty(storageSettings.ConnectionString)) throw new Exception("Hangfire Storage Provider ConnectionString is not configured.");
+			_logger.Information($"Hangfire: Current Storage Provider : {storageSettings.StorageProvider}");
+			_logger.Information("For more Hangfire storage, visit https://www.hangfire.io/extensions.html");
 
-			//services.AddSingleton<JobActivator, FSHJobActivator>();
+			services.AddSingleton<JobActivator, OwnJobActivator>();
 
-			//services.AddHangfire((provider, hangfireConfig) => hangfireConfig
-			//	.UseDatabase(storageSettings.StorageProvider, storageSettings.ConnectionString, config)
-			//	.UseFilter(new FSHJobFilter(provider))
-			//	.UseFilter(new LogJobFilter())
-			//	.UseConsole());
+			services.AddHangfire((provider, hangfireConfig) => hangfireConfig
+				.UseDatabase(storageSettings.StorageProvider, storageSettings.ConnectionString, config)
+				.UseFilter(new OwnJobFilter(provider))
+				.UseFilter(new LogJobFilter())
+				.UseConsole());
 
 			return services;
 		}
 
-		//private static IGlobalConfiguration UseDatabase(this IGlobalConfiguration hangfireConfig, string dbProvider, string connectionString, IConfiguration config) =>
-		//	dbProvider.ToLowerInvariant() switch
-		//	{
-		//		DbProviderKeys.Npgsql =>
-		//			hangfireConfig.UsePostgreSqlStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<PostgreSqlStorageOptions>()),
-		//		DbProviderKeys.SqlServer =>
-		//			hangfireConfig.UseSqlServerStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<SqlServerStorageOptions>()),
-		//		DbProviderKeys.SqLite =>
-		//			hangfireConfig.UseSQLiteStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<SQLiteStorageOptions>()),
-		//		DbProviderKeys.MySql =>
-		//			hangfireConfig.UseStorage(new MySqlStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<MySqlStorageOptions>())),
-		//		_ => throw new Exception($"Hangfire Storage Provider {dbProvider} is not supported.")
-		//	};
+		private static IGlobalConfiguration UseDatabase(this IGlobalConfiguration hangfireConfig, string dbProvider, string connectionString, IConfiguration config) =>
+			dbProvider.ToLowerInvariant() switch
+			{
+				DbProviderKeys.Npgsql =>
+					hangfireConfig.UsePostgreSqlStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<PostgreSqlStorageOptions>()),
+				DbProviderKeys.SqlServer =>
+					hangfireConfig.UseSqlServerStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<SqlServerStorageOptions>()),
+				DbProviderKeys.SqLite =>
+					hangfireConfig.UseSQLiteStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<SQLiteStorageOptions>()),
+				DbProviderKeys.MySql =>
+					hangfireConfig.UseStorage(new MySqlStorage(connectionString, config.GetSection("HangfireSettings:Storage:Options").Get<MySqlStorageOptions>())),
+				_ => throw new Exception($"Hangfire Storage Provider {dbProvider} is not supported.")
+			};
 
-		//internal static IApplicationBuilder UseHangfireDashboard(this IApplicationBuilder app, IConfiguration config)
-		//{
-		//	var dashboardOptions = config.GetSection("HangfireSettings:Dashboard").Get<DashboardOptions>();
-		//	if (dashboardOptions is null) throw new Exception("Hangfire Dashboard is not configured.");
-		//	dashboardOptions.Authorization = new[]
-		//	{
-		//   new HangfireCustomBasicAuthenticationFilter
-		//   {
-		//		User = config.GetSection("HangfireSettings:Credentials:User").Value!,
-		//		Pass = config.GetSection("HangfireSettings:Credentials:Password").Value!
-		//   }
-		//};
-
-		//	return app.UseHangfireDashboard(config["HangfireSettings:Route"], dashboardOptions);
-		//}
-
-
-		public static void UseHangfireDashboardAndJobs(this IApplicationBuilder app)
+		internal static IApplicationBuilder UseHangfireDashboard(this IApplicationBuilder app, IConfiguration config)
 		{
-			//app.UseHangfireDashboard();
-			//RecurringJob.AddOrUpdate<Helper.HangfireJobs>(x => x.RefreshFundDatas(), "20 22 * * *");
+			var dashboardOptions = config.GetSection("HangfireSettings:Dashboard").Get<DashboardOptions>();
+			if (dashboardOptions is null) throw new Exception("Hangfire Dashboard is not configured.");
+			dashboardOptions.Authorization = new[]
+			{
+		   new HangfireCustomBasicAuthenticationFilter
+		   {
+				User = config.GetSection("HangfireSettings:Credentials:User").Value!,
+				Pass = config.GetSection("HangfireSettings:Credentials:Password").Value!
+		   }
+		};
+
+			return app.UseHangfireDashboard(config["HangfireSettings:Route"], dashboardOptions);
 		}
+
+
+		//public static void UseHangfireDashboardAndJobs(this IApplicationBuilder app)
+		//{
+		//	//app.UseHangfireDashboard();
+		//	//RecurringJob.AddOrUpdate<Helper.HangfireJobs>(x => x.RefreshFundDatas(), "20 22 * * *");
+		//}
 	}
 }
