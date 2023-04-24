@@ -55,7 +55,7 @@ namespace Infrastructure.BackgroundJobs
 				_ => throw new Exception($"Hangfire Storage Provider {dbProvider} is not supported.")
 			};
 
-		internal static IApplicationBuilder UseHangfireDashboard(this IApplicationBuilder app, IConfiguration config)
+		public static IApplicationBuilder UseHangfireDashboard(this IApplicationBuilder app, IConfiguration config)
 		{
 			var dashboardOptions = config.GetSection("HangfireSettings:Dashboard").Get<DashboardOptions>();
 			if (dashboardOptions is null) throw new Exception("Hangfire Dashboard is not configured.");

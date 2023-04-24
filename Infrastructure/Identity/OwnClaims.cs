@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Identity
 {
-	public class Claims
+	public class OwnClaims
 	{	
 		public const string Fullname = "fullName";
 		public const string Permission = "permission";

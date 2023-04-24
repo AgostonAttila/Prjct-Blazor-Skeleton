@@ -1,11 +1,14 @@
 
+using Hangfire;
 using Infrastructure.BackgroundJobs;
 using Infrastructure.Caching;
 using Infrastructure.Cors;
 using Infrastructure.HealthCheck;
+using Infrastructure.Localization;
 using Infrastructure.Logging;
 using Infrastructure.Middlaware;
 using Infrastructure.SignalR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using WebAPI.Configurations;
@@ -32,10 +35,11 @@ try
 
 
 	//compress + 2FA + mail + reset pwd +törlés cookieból bezáráskor
-	//cahce hangfire localization notification olvasni 
-	//api versioning
+	//notification olvasni 
+	
 
-	////.AddApiVersioning()
+
+	//builder.Services.AddApiVersioning();
 	builder.Services.AddIdentityServices(builder.Configuration);
 	builder.Services.AddSwaggerExtension();
 	builder.Services.AddAppSettings(builder.Configuration);
@@ -45,18 +49,19 @@ try
 	//builder.Services.AddExceptionMiddleware();
 	////.AddBehaviours(applicationAssembly)
 	builder.Services.AddHealthChecks();
-	///////AddPOLocalization(config)
+	builder.Services.AddOwnLocalization(builder.Configuration);
 	////.AddMailing(config)
 	////.AddMediatR(Assembly.GetExecutingAssembly())	
 	////.AddNotifications(config)
 	////.AddOpenApiDocumentation(config)
 	builder.Services.AddPersistence(builder.Configuration);
-	////builder.Services.AddRequestLogging(config)
+	builder.Services.AddRequestLogging(builder.Configuration);
 	builder.Services.AddRouting(options => options.LowercaseUrls = true);	
 	builder.Services.AddOwnServices();
 	builder.Services.AddHttpContextAccessor();
 
 	var app = builder.Build();
+
 
 
 	app.UseExceptionMiddleware();
@@ -77,30 +82,25 @@ try
 			await next.Invoke();
 		});
 	}
-
 	app.UseCorsPolicy();
-
 	app.UseDefaultFiles();
 	app.UseStaticFiles();
 	app.UseStaticFiles(new StaticFileOptions()
 	{
 		FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
 		RequestPath = new PathString("/StaticFiles")
-	});
-
-	
-
+	});	
 	app.UseAuthentication();
 	app.UseAuthorization();
-
 	//app.UseHttpsRedirection();
-
 	app.UseHealthChecks();
+	app.UseRequestLogging(builder.Configuration);
+	app.UseHangfireDashboard(builder.Configuration);
 
 	app.MapControllers();
 	app.MapHub<ChatHub>("/chat");
+	app.MapHealthChecks("/api/health");
 	app.MapFallbackToController("Index", "Fallback");
-
 
 	await app.MigrateDatabase().RunAsync();
 }

@@ -530,6 +530,22 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Mvc.Versioning/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "type": "package",
         "compile": {
@@ -1497,6 +1513,41 @@
             "related": ".xml"
           }
         }
+      },
+      "OrchardCore.Localization.Abstractions/1.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/OrchardCore.Localization.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/OrchardCore.Localization.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "OrchardCore.Localization.Core/1.6.0": {
+        "type": "package",
+        "dependencies": {
+          "OrchardCore.Localization.Abstractions": "1.6.0"
+        },
+        "compile": {
+          "lib/net6.0/OrchardCore.Localization.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/OrchardCore.Localization.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Pipelines.Sockets.Unofficial/2.2.0": {
         "type": "package",
@@ -4277,6 +4328,25 @@
         "microsoft.aspnetcore.metadata.nuspec"
       ]
     },
+    "Microsoft.AspNetCore.Mvc.Versioning/5.0.0": {
+      "sha512": "mN9IARvNpHMBD2/oGmp5Bxp1Dg45Hfcp+LWaAyTtL2HisWLMOIcf0Ox1qW9IvCvdbHM+2A9dWEInhiqBsNxsJA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.mvc.versioning/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "icon.png",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/net5.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "microsoft.aspnetcore.mvc.versioning.5.0.0.nupkg.sha512",
+        "microsoft.aspnetcore.mvc.versioning.nuspec"
+      ]
+    },
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
       "sha512": "yuvf07qFWFqtK3P/MRkEKLhn5r2UbSpVueRziSqj0yJQIKFwG1pq9mOayK3zE5qZCTs0CbrwL9M6R8VwqyGy2w==",
       "type": "package",
@@ -5519,6 +5589,38 @@
         "npgsql.entityframeworkcore.postgresql.6.0.8.nupkg.sha512",
         "npgsql.entityframeworkcore.postgresql.nuspec",
         "postgresql.png"
+      ]
+    },
+    "OrchardCore.Localization.Abstractions/1.6.0": {
+      "sha512": "1C6rML4/Dpr5S+5tiUKuLm+yohswCGaQXisy4R90y60NywNG5JxxxWZAzzBcnHzMbIoCwaANP2ObjN7ffP9Lig==",
+      "type": "package",
+      "path": "orchardcore.localization.abstractions/1.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net6.0/OrchardCore.Localization.Abstractions.dll",
+        "lib/net6.0/OrchardCore.Localization.Abstractions.xml",
+        "lib/net7.0/OrchardCore.Localization.Abstractions.dll",
+        "lib/net7.0/OrchardCore.Localization.Abstractions.xml",
+        "orchardcore.localization.abstractions.1.6.0.nupkg.sha512",
+        "orchardcore.localization.abstractions.nuspec"
+      ]
+    },
+    "OrchardCore.Localization.Core/1.6.0": {
+      "sha512": "IpJANm3Ap1YXJDofiK1zrvUzN5cWzt7nBWuKyQ2tQOp2qtQnEWqVcsGLxjdrj3P2V1l72VklG9dT2SOiuDtG1g==",
+      "type": "package",
+      "path": "orchardcore.localization.core/1.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net6.0/OrchardCore.Localization.Core.dll",
+        "lib/net6.0/OrchardCore.Localization.Core.xml",
+        "lib/net7.0/OrchardCore.Localization.Core.dll",
+        "lib/net7.0/OrchardCore.Localization.Core.xml",
+        "orchardcore.localization.core.1.6.0.nupkg.sha512",
+        "orchardcore.localization.core.nuspec"
       ]
     },
     "Pipelines.Sockets.Unofficial/2.2.0": {
@@ -10178,8 +10280,10 @@
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.16",
       "Microsoft.AspNetCore.Authorization >= 6.0.15",
       "Microsoft.AspNetCore.Http.Abstractions >= 2.2.0",
+      "Microsoft.AspNetCore.Mvc.Versioning >= 5.0.0",
       "Microsoft.Extensions.Caching.StackExchangeRedis >= 6.0.16",
       "Microsoft.Extensions.Configuration.Abstractions >= 6.0.0",
+      "OrchardCore.Localization.Core >= 1.6.0",
       "Persistence >= 1.0.0",
       "SendGrid >= 9.28.1",
       "Serilog >= 2.12.0",
@@ -10294,6 +10398,10 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
+          "Microsoft.AspNetCore.Mvc.Versioning": {
+            "target": "Package",
+            "version": "[5.0.0, )"
+          },
           "Microsoft.Extensions.Caching.StackExchangeRedis": {
             "target": "Package",
             "version": "[6.0.16, )"
@@ -10301,6 +10409,10 @@
           "Microsoft.Extensions.Configuration.Abstractions": {
             "target": "Package",
             "version": "[6.0.0, )"
+          },
+          "OrchardCore.Localization.Core": {
+            "target": "Package",
+            "version": "[1.6.0, )"
           },
           "SendGrid": {
             "target": "Package",

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Domain;
 
 namespace Persistence.Configuration
 {
@@ -20,6 +21,6 @@ namespace Persistence.Configuration
 					NormalizedName = "ADMINISTRATOR"
 				}
 			);
-		}
+		}	
 	}
 }

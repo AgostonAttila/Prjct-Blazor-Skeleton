@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Identity
 {
-	internal class Roles
+	public static class OwnRoles
 	{
 		public const string Admin = nameof(Admin);
 		public const string Basic = nameof(Basic);

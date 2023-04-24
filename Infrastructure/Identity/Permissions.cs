@@ -76,6 +76,7 @@ namespace Infrastructure.Identity
 		public static IReadOnlyList<OwnPermission> Root { get; } = new ReadOnlyCollection<OwnPermission>(_all.Where(p => p.IsRoot).ToArray());
 		public static IReadOnlyList<OwnPermission> Admin { get; } = new ReadOnlyCollection<OwnPermission>(_all.Where(p => !p.IsRoot).ToArray());
 		public static IReadOnlyList<OwnPermission> Basic { get; } = new ReadOnlyCollection<OwnPermission>(_all.Where(p => p.IsBasic).ToArray());
+	
 	}
 
 	public record OwnPermission(string Description, string Action, string Resource, bool IsBasic = false, bool IsRoot = false)

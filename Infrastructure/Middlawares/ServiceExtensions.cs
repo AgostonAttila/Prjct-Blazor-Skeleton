@@ -13,7 +13,7 @@ namespace Infrastructure.Middlaware
 		public static IApplicationBuilder UseExceptionMiddleware(this IApplicationBuilder app) =>
 			app.UseMiddleware<ExceptionMiddleware>();
 
-		internal static IServiceCollection AddRequestLogging(this IServiceCollection services, IConfiguration config)
+		public static IServiceCollection AddRequestLogging(this IServiceCollection services, IConfiguration config)
 		{
 			if (GetMiddlewareSettings(config).EnableHttpsLogging)
 			{
@@ -24,7 +24,7 @@ namespace Infrastructure.Middlaware
 			return services;
 		}
 
-		internal static IApplicationBuilder UseRequestLogging(this IApplicationBuilder app, IConfiguration config)
+		public static IApplicationBuilder UseRequestLogging(this IApplicationBuilder app, IConfiguration config)
 		{
 			if (GetMiddlewareSettings(config).EnableHttpsLogging)
 			{

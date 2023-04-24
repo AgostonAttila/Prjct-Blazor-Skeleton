@@ -20,7 +20,7 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
-			builder.ApplyConfiguration(new RoleConfiguration());												 
+			//builder.ApplyConfiguration(new RoleConfiguration());												 
 		}
 
 		

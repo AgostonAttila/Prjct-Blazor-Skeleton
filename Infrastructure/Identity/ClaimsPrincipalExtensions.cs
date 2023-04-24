@@ -13,7 +13,7 @@ namespace Infrastructure.Identity
 			=> principal.FindFirstValue(ClaimTypes.Email);
 	
 		public static string? GetFullName(this ClaimsPrincipal principal)
-			=> principal?.FindFirst(Claims.Fullname)?.Value;
+			=> principal?.FindFirst(OwnClaims.Fullname)?.Value;
 
 		public static string? GetFirstName(this ClaimsPrincipal principal)
 			=> principal?.FindFirst(ClaimTypes.Name)?.Value;
@@ -28,11 +28,11 @@ namespace Infrastructure.Identity
 		   => principal.FindFirstValue(ClaimTypes.NameIdentifier);
 
 		public static string? GetImageUrl(this ClaimsPrincipal principal)
-		   => principal.FindFirstValue(Claims.ImageUrl);
+		   => principal.FindFirstValue(OwnClaims.ImageUrl);
 
 		public static DateTimeOffset GetExpiration(this ClaimsPrincipal principal) =>
 			DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(
-				principal.FindFirstValue(Claims.Expiration)));
+				principal.FindFirstValue(OwnClaims.Expiration)));
 
 		private static string? FindFirstValue(this ClaimsPrincipal principal, string claimType) =>
 			principal is null

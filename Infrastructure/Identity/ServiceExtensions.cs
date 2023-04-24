@@ -43,6 +43,7 @@ namespace WebAPI.Extensions
 			.AddRoles<IdentityRole>()
 			.AddEntityFrameworkStores<DataContext>()
 			.AddSignInManager<SignInManager<AppUser>>()
+			//.AddRoleManager<RoleManager<ApplicationRole>>()
 			.AddDefaultTokenProviders();
 
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securitySettings.JwtSettings.key));
@@ -86,7 +87,7 @@ namespace WebAPI.Extensions
 				});
 			});
 
-			services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+			//services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
 			StaticLogger.EnsureInitialized();
 			Log.Information($"AddIdentityCore  jwt token expires: {securitySettings.JwtSettings.tokenExpirationInMinutes } minutes , refresh token expires: {securitySettings.JwtSettings.refreshTokenExpirationInDays} , refresh token TTL: {securitySettings.JwtSettings.refreshTokenRemoveInDays} ");
