@@ -1,4 +1,3 @@
-using Blazored.LocalStorage;
 using Client;
 using Client.Services;
 using Client.Services.AccountService;
@@ -29,12 +28,14 @@ builder.Services.AddScoped(sp => new HttpClient
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITesztService, TesztService>();
 
+
 builder.Services.AddScoped<RefreshTokenService>();
 
 
 
 //LocalStorage
-builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
+//builder.Services.AddBlazoredLocalStorage();
 
 //State containers
 builder.Services.AddSingleton<AppState>();

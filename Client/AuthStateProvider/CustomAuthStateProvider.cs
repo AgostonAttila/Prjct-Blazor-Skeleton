@@ -1,4 +1,4 @@
-﻿using Blazored.LocalStorage;
+﻿
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Headers;
@@ -9,6 +9,7 @@ using Client.Features;
 using System.Net.Http;
 using System.Security.Principal;
 using Syncfusion.Blazor.Diagrams;
+using Client.Services;
 
 namespace Client
 {

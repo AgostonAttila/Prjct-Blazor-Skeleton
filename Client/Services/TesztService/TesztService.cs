@@ -1,9 +1,4 @@
-﻿using Blazored.LocalStorage;
-using Client.Models;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.Net.Http;
-using System.Text;
+﻿using Client.Models;
 using System.Text.Json;
 
 namespace Client.Services.TesztService

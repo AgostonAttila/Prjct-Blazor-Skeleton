@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace Infrastructure.Localization
 {
-	public static class ServiceEstension
+	public static class ServiceExtension
 	{
 		public  static IServiceCollection AddOwnLocalization(this IServiceCollection services, IConfiguration config)
 		{

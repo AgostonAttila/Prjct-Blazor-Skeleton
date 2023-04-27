@@ -1,5 +1,4 @@
-﻿using Blazored.LocalStorage;
-using Client.Models;
+﻿using Client.Models;
 using Client.Models.DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
